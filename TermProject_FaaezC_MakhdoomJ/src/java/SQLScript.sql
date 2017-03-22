@@ -14,8 +14,18 @@ create table USERTABLE(
     LASTNAME varchar(255),
     PASSWORD char(64),
     EMAIL varchar(255),
-    SCHOOL_ID INT,
     PRIMARY KEY (id)
+);
+
+create table STUDENTTABLE(
+    ID INT NOT NULL AUTO_INCREMERNT,
+    USER_ID INT NOT NULL,
+    STUDENT_ID INT NOT NULL,
+    MAJOR_CODE INT,
+    PRIMARY KEY(id)
+    FOREIGN KEY(USER_ID)
+        REFERENCES USERTABLE(ID)
+        ON DELETE CASCADE
 );
 
 create table GROUPTABLE(
@@ -29,7 +39,10 @@ create table GROUPTABLE(
 );
 
 insert into USERTABLE (FIRSTNAME, LASTNAME, PASSWORD, EMAIL, SCHOOL_ID)
-        values('Faaez','Chishti','c4289629b08bc4d61411aaa6d6d4a0c3c5f8c1e848e282976e29b6bed5aeedc7','fchishti@uco.edu',12345678);
+        values('Faaez','Chishti','c4289629b08bc4d61411aaa6d6d4a0c3c5f8c1e848e282976e29b6bed5aeedc7','fchishti@uco.edu');
+
+insert into STDUENTTABLE (USER_ID, STDUENT_ID, MAJOR_CODE) 
+        values ((SELECT USER_ID FROM USERINFO where FIRSTNAME = 'Faaez'), 12345678, 6100);
 
 insert into GROUPTABLE (USER_ID,GROUPNAME) 
         values ((SELECT USER_ID FROM USERINFO where FIRSTNAME = 'Faaez'),'studentgroup');
