@@ -5,17 +5,22 @@
  */
 package AAS.model;
 
+import java.util.List;
+
 /**
  *
  * @author faaez
  */
-public class User {
+public class StudentUser {
     public String firstname;
-    public String lasename;
+    public String lastname;
     public String email;
     public String password;
     public int studentId;
     public int majorCode;
+    public String group;
+    public int userId;
+    public List<Course> courses;
 
     public String getFirstname() {
         return firstname;
@@ -26,11 +31,11 @@ public class User {
     }
 
     public String getLasename() {
-        return lasename;
+        return lastname;
     }
 
     public void setLasename(String lasename) {
-        this.lasename = lasename;
+        this.lastname = lasename;
     }
 
     public String getEmail() {
@@ -64,6 +69,37 @@ public class User {
     public void setMajorCode(int majorCode) {
         this.majorCode = majorCode;
     }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
     
+    public void setUserId(int userId){
+        this.userId = userId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
     
 }
