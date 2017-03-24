@@ -38,6 +38,24 @@ create table GROUPTABLE(
         ON DELETE CASCADE
 );
 
+create table COURSETABLE(
+    ID INT NOT NULL AUTO_INCREMENT,
+    TITLE varchar(255),
+    COURSEPREFIX varchar(255),
+    CODE INT,
+    PRIMARY KEY (id)
+);
+
+create table STUDENTCOURSESTABLE(
+    ID INT NOT NULL AUTO_INCREMENT,
+    USER_ID INT NOT NULL,
+    COURSE_ID varchar(255),
+    PRIMARY KEY(id),
+    FOREIGN KEY(USER_ID)
+        REFERENCES USERTABLE(ID)
+        ON DELETE CASCADE
+);
+
 insert into USERTABLE (FIRSTNAME, LASTNAME, PASSWORD, EMAIL)
         values('Faaez','Chishti','c4289629b08bc4d61411aaa6d6d4a0c3c5f8c1e848e282976e29b6bed5aeedc7','fchishti@uco.edu');
 
@@ -56,3 +74,14 @@ insert into GROUPTABLE (USER_ID,GROUPNAME)
 insert into GROUPTABLE (USER_ID,GROUPNAME) 
         values ((SELECT ID FROM USERTABLE where FIRSTNAME = 'Hong'),'admingroup');
 
+insert into COURSETABLE (TITLE, COURSEPREFIX, CODE)
+        values ('Programming I', 'CMSC', 1613);
+
+insert into COURSETABLE (TITLE, COURSEPREFIX, CODE)
+        values ('Programming II', 'CMSC', 2613);
+
+insert into COURSETABLE (TITLE, COURSEPREFIX, CODE)
+        values ('Operating Systems', 'CMSC', 4153);
+
+insert into STUDENTCOURSESTABLE (USER_ID, COURSE_ID)
+        values ((SELECT ID FROM USERTABLE where FIRSTNAME = 'Faaez'),(SELECT ID FROM COURSETABLE where TITLE = 'Programming I'));
