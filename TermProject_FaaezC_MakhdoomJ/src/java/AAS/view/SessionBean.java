@@ -17,9 +17,9 @@ import javax.inject.Named;
  * @author cece
  */
 
-@Named(value = "userBean")
+@Named(value = "SessionBean")
 @SessionScoped
-public class UserBean implements Serializable {
+public class SessionBean implements Serializable {
 
     private String username;
 

@@ -43,7 +43,7 @@ public class CrudBean implements Serializable{
         try{
             this.list = dataBase.read();
         } catch (SQLException ex){
-            java.util.logging.Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class CrudBean implements Serializable{
             dataBase.create(user);
             return "/login";
         } catch (SQLException ex){
-            java.util.logging.Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
