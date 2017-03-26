@@ -5,6 +5,7 @@
  */
 package AAS.controller;
 
+import AAS.model.FacultyUser;
 import AAS.model.StudentUser;
 import AAS.model.User;
 import AAS.utility.Sha256;
@@ -123,6 +124,71 @@ public class UserDB {
         }
 
         return list;
+    }
+
+    public User readUser(String username, String role) throws SQLException {
+
+        StudentUser su = new StudentUser();
+        FacultyUser fu = new FacultyUser();
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps;
+            if (role.equals("faculty")) {
+                ps = conn.prepareStatement(
+                        "select FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
+                );
+            } else if (role.equals("student")) {
+                ps = conn.prepareStatement(
+                        "select USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, STUDENTTABLE.STUDENT_ID, STUDENTTABLE.MAJOR_CODE "
+                        + " from USERTABLE join STUDENTTABLE on USERTABLE.ID = STUDENTTABLE.USER_ID"
+                        + "where USERTABLE.EMAIL = (?)"
+                );
+            } else {
+                ps = conn.prepareStatement(
+                        "select FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
+                );
+            }
+
+            ps.setString(1, username);
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+                if (role.equals("student")) {
+                    su.setFirstname(result.getString("FIRSTNAME"));
+                    su.setFirstname(result.getString("LASTNAME"));
+                    su.setEmail(result.getString("EMAIL"));
+                    su.setGroup(result.getString("GROUPNAME"));
+                    su.setMajorCode(result.getInt("MAJOR_CODE"));
+                    su.setStudentId(result.getInt("STUDENT_ID"));
+                } else {
+                    fu = new FacultyUser();
+                    fu.setFirstname(result.getString("FIRSTNAME"));
+                    fu.setFirstname(result.getString("LASTNAME"));
+                    fu.setEmail(result.getString("EMAIL"));
+                    fu.setGroup(result.getString("GROUPNAME"));
+                }
+            }
+
+        } finally {
+            conn.close();
+        }
+
+        if (role.equals("student")) {
+            return su;
+        } else {
+            return fu;
+        }
     }
 
     public void update(User user) throws SQLException {
