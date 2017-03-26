@@ -9,6 +9,10 @@
     <role-name>studentrole</role-name>
     <group-name>studentgroup</group-name>
   </security-role-mapping>
+  <security-role-mapping>
+    <role-name>facultyrole</role-name>
+    <group-name>facultygroup</group-name>
+  </security-role-mapping>
   <class-loader delegate="true"/>
   <jsp-config>
     <property name="keepgenerated" value="true">

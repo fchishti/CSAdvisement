@@ -5,9 +5,10 @@
  */
 package AAS.view;
 
-import AAS.controller.UserDB;
-import AAS.model.StudentUser;
-import AAS.model.User;
+import AAS.controller.CoursesDB;
+import AAS.controller.StudentCoursesDB;
+import AAS.model.Course;
+import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,74 +21,52 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author cece
+ * @author faaez
  */
-@Named(value = "crudBean")
+@Named(value = "StudentCourseCrudBean")
 @SessionScoped
-public class CrudBean implements Serializable{
+public class StudentCourseCrudBean implements Serializable{
     
     @Resource(name="jdbc/ds")
     private DataSource ds;
     
-    private UserDB dataBase;
-    private StudentUser user;
-    private List<StudentUser> list;
+    private CoursesDB coursesDB;
+    private StudentCoursesDB studentCoursesDB;
+    private CurrentUser user;
+    private List<Course> list;
     
     @PostConstruct
     public void init() {
-        dataBase = new UserDB(ds);
-        user = new StudentUser();
+        coursesDB = new CoursesDB(ds);
+        studentCoursesDB = new StudentCoursesDB(ds);
+        user = new CurrentUser(ds);
         read();
     }
     
     public String read(){
         try{
-            this.list = dataBase.read();
+            this.list = studentCoursesDB.read(user.getUser());
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
     
-    public String create(){
+    public String insert(Course course){
         try{
-            dataBase.create(user);
-            return "/login";
+            studentCoursesDB.create(user.getUser(),course);
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
+        return null;
     }
     
-    public String delete(User user){
+    public String delete(Course course){
         try{
-            dataBase.delete(user);
-            return "/login";
+            studentCoursesDB.delete(user.getUser(),course);
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
-    }
-    
-    public String update(User user){
-        try{
-            dataBase.delete(user);
-            return "/login";
-        } catch (SQLException ex){
-            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-    }
-    
-    public StudentUser getUser() {
-        return user;
-    }
-
-    public void setUser(StudentUser user) {
-        this.user = user;
-    }
-
-    public List<StudentUser> getList() {
-        return list;
+        return null;
     }
 }
