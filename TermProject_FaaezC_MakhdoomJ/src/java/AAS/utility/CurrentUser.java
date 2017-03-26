@@ -34,11 +34,11 @@ public class CurrentUser {
     }
 
     private void loadRole(FacesContext fc) {
-        if (fc.getExternalContext().isUserInRole("STUDENT")) {
+        if (fc.getExternalContext().isUserInRole("studentrole")) {
             this.role = "student";
-        } else if (fc.getExternalContext().isUserInRole("FACULTY")) {
+        } else if (fc.getExternalContext().isUserInRole("facultyrole")) {
             this.role = "faculty";
-        } else if (fc.getExternalContext().isUserInRole("ADMIN")) {
+        } else if (fc.getExternalContext().isUserInRole("adminrole")) {
             this.role = "admin";
         }
     }
