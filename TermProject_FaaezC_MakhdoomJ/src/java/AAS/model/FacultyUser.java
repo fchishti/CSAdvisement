@@ -14,6 +14,10 @@ import java.util.List;
 public class FacultyUser extends User{
     
     public List<Appointment> slots;
+    
+    public FacultyUser(){
+        super();
+    }
 
     public List<Appointment> getSlots() {
         return slots;

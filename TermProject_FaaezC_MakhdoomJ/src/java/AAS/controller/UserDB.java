@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
@@ -48,29 +49,26 @@ public class UserDB {
             );
 
             PreparedStatement ps2 = conn.prepareStatement(
-                    "insert into GROUPTABLE (groupname, user_id) values ('studentgroup', (?))"
+                    "insert into GROUPTABLE (groupname, user_id, username) "
+                    + "values ('studentgroup', (select ID from USERTABLE where EMAIL = (?)),?)"
             );
 
             PreparedStatement ps3 = conn.prepareStatement(
-                    "insert into STUDENTTABLE (user_id, student_id, major_code) values (?,?,?)"
+                    "insert into STUDENTTABLE (user_id, student_id, major_code) "
+                    + "values ((select ID from USERTABLE where EMAIL = (?)),?,?)"
             );
 
             ps.setString(1, user.getFirstname());
-
             ps.setString(2, user.getLastname());
-
             Sha256 password = new Sha256(user.getPassword());
+            ps.setString(3, password.getCipher());
+            ps.setString(4, user.getEmail());
 
-            ps.setString(2, password.getCipher());
+            ps2.setString(1, user.getEmail());
+            ps2.setString(2, user.getEmail());
 
-            ps.setString(3, user.getEmail());
-
-            ps2.setInt(1, user.getUserId());
-
-            ps3.setInt(1, user.getUserId());
-
+            ps3.setString(1, user.getEmail());
             ps3.setInt(2, user.getStudentId());
-
             ps3.setInt(3, user.getMajorCode());
 
             int result = ps.executeUpdate();
@@ -113,7 +111,7 @@ public class UserDB {
 
                 StudentUser u = new StudentUser();
                 u.setFirstname(result.getString("FIRSTNAME"));
-                u.setFirstname(result.getString("LASTNAME"));
+                u.setLastname(result.getString("LASTNAME"));
                 u.setEmail(result.getString("EMAIL"));
                 u.setGroup(result.getString("GROUPNAME"));
                 list.add(u);
@@ -149,9 +147,8 @@ public class UserDB {
                 );
             } else if (role.equals("student")) {
                 ps = conn.prepareStatement(
-                        "select USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, STUDENTTABLE.STUDENT_ID, STUDENTTABLE.MAJOR_CODE "
-                        + " from USERTABLE join STUDENTTABLE on USERTABLE.ID = STUDENTTABLE.USER_ID"
-                        + "where USERTABLE.EMAIL = (?)"
+                        "select a.FIRSTNAME, a.LASTNAME, a.EMAIL, b.STUDENT_ID, b.MAJOR_CODE "
+                        + " from USERTABLE a join STUDENTTABLE b on a.ID = b.USER_ID where a.EMAIL = ?"
                 );
             } else {
                 ps = conn.prepareStatement(
@@ -166,17 +163,15 @@ public class UserDB {
             while (result.next()) {
                 if (role.equals("student")) {
                     su.setFirstname(result.getString("FIRSTNAME"));
-                    su.setFirstname(result.getString("LASTNAME"));
+                    su.setLastname(result.getString("LASTNAME"));
                     su.setEmail(result.getString("EMAIL"));
-                    su.setGroup(result.getString("GROUPNAME"));
                     su.setMajorCode(result.getInt("MAJOR_CODE"));
                     su.setStudentId(result.getInt("STUDENT_ID"));
                 } else {
                     fu = new FacultyUser();
                     fu.setFirstname(result.getString("FIRSTNAME"));
-                    fu.setFirstname(result.getString("LASTNAME"));
+                    fu.setLastname(result.getString("LASTNAME"));
                     fu.setEmail(result.getString("EMAIL"));
-                    fu.setGroup(result.getString("GROUPNAME"));
                 }
             }
 
@@ -192,6 +187,11 @@ public class UserDB {
     }
 
     public void update(User user) throws SQLException {
+        Logger logger = Logger.getLogger(getClass().getName());
+        logger.severe("severe");
+        logger.info(user.getEmail() + " " + user.getFirstname() + " " + user.getLastname());
+        logger.fine("fine");
+
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -205,37 +205,33 @@ public class UserDB {
         try {
 
             PreparedStatement ps = conn.prepareStatement(
-                    "update USERTABLE set FIRSTNAME = (?), LASTNAME = (?), EMAIL= (?), PASSWORD = (?)"
-                    + "where ID = (?)"
+                    "update USERTABLE set FIRSTNAME = (?), LASTNAME = (?), EMAIL = (?) where ID = (?)"
             );
 
             ps.setString(1, user.getFirstname());
             ps.setString(2, user.getLastname());
             ps.setString(3, user.getEmail());
-
-            Sha256 password = new Sha256(user.getPassword());
-
-            ps.setString(4, password.getCipher());
-
-            ps.setInt(5, user.getUserId());
+            ps.setInt(4, user.getUserId());
 
             int result = ps.executeUpdate();
-
-            int result2 = 0;
 
             if (user instanceof StudentUser) {
                 StudentUser student = (StudentUser) user;
 
                 PreparedStatement ps2 = conn.prepareStatement(
-                        "update STUDENTTABLE set STUDENT_ID = (?), MAJOR_CODE = (?)"
-                        + "where USER_ID = (?)"
+                        "update STUDENTTABLE set STUDENT_ID = (?), MAJOR_CODE = (?) where USER_ID = (?)"
                 );
 
                 ps2.setInt(1, student.getStudentId());
                 ps2.setInt(2, student.getMajorCode());
                 ps2.setInt(3, user.getUserId());
 
-                result2 = ps2.executeUpdate();
+                logger = Logger.getLogger(getClass().getName());
+                logger.severe("severe");
+                logger.info(user.getEmail() + " " + user.getFirstname() + " " + user.getLastname() + " " + user.getPassword()
+                        + " " + student.getStudentId() + " " + student.getMajorCode());
+
+                int result2 = ps2.executeUpdate();
 
                 if (result2 != 1) {
                     throw new SQLException();

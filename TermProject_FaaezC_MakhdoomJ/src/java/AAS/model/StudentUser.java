@@ -17,6 +17,9 @@ public class StudentUser extends User{
     public int majorCode;
     public List<Course> courses;
 
+    public StudentUser(){
+        super();
+    }
     public int getStudentId() {
         return studentId;
     }

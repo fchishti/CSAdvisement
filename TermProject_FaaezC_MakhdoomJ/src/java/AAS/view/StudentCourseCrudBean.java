@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 @SessionScoped
 public class StudentCourseCrudBean implements Serializable{
     
-    @Resource(name="jdbc/ds")
+    @Resource(name="jdbc/ds_wsp")
     private DataSource ds;
     
     private CoursesDB coursesDB;
@@ -69,4 +69,13 @@ public class StudentCourseCrudBean implements Serializable{
         }
         return null;
     }
+
+    public CurrentUser getUser() {
+        return user;
+    }
+
+    public void setUser(CurrentUser user) {
+        this.user = user;
+    }
+    
 }

@@ -9,7 +9,7 @@ package AAS.model;
  *
  * @author faaez
  */
-public class User {
+public abstract class User {
 
     public String firstname;
     public String lastname;
@@ -17,6 +17,9 @@ public class User {
     public String password;
     public int userId;
     public String group;
+    
+    public User(){
+    }
 
     public String getFirstname() {
         return firstname;
