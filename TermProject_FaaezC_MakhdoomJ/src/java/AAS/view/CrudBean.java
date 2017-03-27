@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 @SessionScoped
 public class CrudBean implements Serializable{
     
-    @Resource(name="jdbc/ds")
+    @Resource(name="jdbc/ds_wsp")
     private DataSource ds;
     
     private UserDB dataBase;

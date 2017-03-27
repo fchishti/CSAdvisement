@@ -8,7 +8,10 @@
     <h:body>
         Hello from Faculty pages
         <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
+        <h:outputLabel value="#{FacultyBean.user.firstname}"/><br />
+        <h:outputLabel value="#{FacultyBean.user.lastname}"/><br />
+        <h:outputLabel value="#{FacultyBean.user.email}"/><br />
+        <h:link value="Logout" outcome="/logout" /> <br />
     </h:body>
 </html>
 

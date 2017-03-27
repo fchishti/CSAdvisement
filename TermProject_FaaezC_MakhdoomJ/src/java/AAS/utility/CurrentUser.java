@@ -47,7 +47,6 @@ public class CurrentUser {
         database = new UserDB(ds);
 
         try {
-            user = new User();
             user = database.readUser(username, role);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);

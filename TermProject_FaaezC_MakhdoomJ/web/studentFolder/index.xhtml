@@ -8,7 +8,13 @@
     <h:body>
         Hello from Student Pages
         <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" /> <br/>
+        <h:outputLabel value="#{StudentBean.user.firstname}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.lastname}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.email}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.studentId}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.majorCode}"/><br/>
+        <br/><br/>
+        <h:button value="edit" outcome="/studentFolder/editInfo"/>
         <h:link value="Logout" outcome="/logout" /> <br />
     </h:body>
 </html>
