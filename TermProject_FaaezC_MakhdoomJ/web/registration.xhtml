@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+            <h1>Register</h1>
+            <h:form>
+                <h:panelGrid>
+                    <h:outputLabel for="firstname" value="firstname" />
+                    <h:inputText id="firstname" value="#{crudBean.user.firstname}"/>
+                    <h:message for="firstname" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="lastname" value="lastname" />
+                    <h:inputText id="lastname" value="#{crudBean.user.lastname}"/>
+                    <h:message for="lastname" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="email" value="email" />
+                    <h:inputText id="email" value="#{crudBean.user.email}"/>
+                    <h:message for="email" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="password" value="password" />
+                    <h:inputSecret id="password" value="#{crudBean.user.password}"/>
+                    <h:message for="password" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="studentid" value="student ID." />
+                    <h:inputText id="studentid" value="#{crudBean.user.studentId}"/>
+                    <h:message for="studentid" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="majorcode" value="major code" />
+                    <h:inputText id="majorcode" value="#{crudBean.user.majorCode}"/>
+                    <h:message for="majorcode" errorStyle="color:red"/>
+
+                    <h:commandButton value="Signup" action="#{crudBean.create()}"/>
+                </h:panelGrid>
+            </h:form>
+    </h:body>
+</html>
+

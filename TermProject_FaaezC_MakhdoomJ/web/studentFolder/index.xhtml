@@ -6,16 +6,15 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        Hello from Student Pages
         <br />
-        <h:link value="Student login" outcome="/studentFolder/index" /> <br />
-        <h:link value="Faculty login" outcome="/facultyFolder/index" /> <br />
-        <h:link value="Admin login" outcome="/adminFolder/index" /> <br />
+        <h:outputLabel value="#{StudentBean.user.firstname}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.lastname}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.email}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.studentId}"/><br/>
+        <h:outputLabel value="#{StudentBean.user.majorCode}"/><br/>
         <br/><br/>
-        <h:link value="Register" outcome="/registration" /> <br />
-        <br/><br/>
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
-        <br/><br/>
+        <h:button value="edit" outcome="/studentFolder/editInfo"/>
         <h:link value="Logout" outcome="/logout" /> <br />
     </h:body>
 </html>
