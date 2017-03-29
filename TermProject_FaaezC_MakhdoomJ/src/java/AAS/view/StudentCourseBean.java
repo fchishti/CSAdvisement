@@ -5,14 +5,15 @@
  */
 package AAS.view;
 
-import AAS.controller.CoursesDB;
-import AAS.controller.StudentCoursesDB;
+import AAS.controller.CourseDB;
+import AAS.controller.StudentCourseDB;
 import AAS.model.Course;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
@@ -23,22 +24,22 @@ import javax.sql.DataSource;
  *
  * @author faaez
  */
-@Named(value = "StudentCourseCrudBean")
+@Named(value = "studentCourseBean")
 @SessionScoped
-public class StudentCourseCrudBean implements Serializable{
+public class StudentCourseBean implements Serializable{
     
     @Resource(name="jdbc/ds_wsp")
     private DataSource ds;
     
-    private CoursesDB coursesDB;
-    private StudentCoursesDB studentCoursesDB;
+    private CourseDB coursesDB;
+    private StudentCourseDB studentCoursesDB;
     private CurrentUser user;
     private List<Course> list;
     
     @PostConstruct
     public void init() {
-        coursesDB = new CoursesDB(ds);
-        studentCoursesDB = new StudentCoursesDB(ds);
+        coursesDB = new CourseDB(ds);
+        studentCoursesDB = new StudentCourseDB(ds);
         user = new CurrentUser(ds);
         read();
     }
@@ -77,5 +78,15 @@ public class StudentCourseCrudBean implements Serializable{
     public void setUser(CurrentUser user) {
         this.user = user;
     }
+
+    public List<Course> getList() {
+        return list;
+    }
+
+    public void setList(List<Course> list) {
+        this.list = list;
+    }
+    
+    
     
 }

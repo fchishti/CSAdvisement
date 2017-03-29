@@ -143,16 +143,16 @@ public class UserDB {
             PreparedStatement ps;
             if (role.equals("faculty")) {
                 ps = conn.prepareStatement(
-                        "select FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
+                        "select ID, FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
                 );
             } else if (role.equals("student")) {
                 ps = conn.prepareStatement(
-                        "select a.FIRSTNAME, a.LASTNAME, a.EMAIL, b.STUDENT_ID, b.MAJOR_CODE "
+                        "select a.ID, a.FIRSTNAME, a.LASTNAME, a.EMAIL, b.STUDENT_ID, b.MAJOR_CODE "
                         + " from USERTABLE a join STUDENTTABLE b on a.ID = b.USER_ID where a.EMAIL = ?"
                 );
             } else {
                 ps = conn.prepareStatement(
-                        "select FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
+                        "select ID, FIRSTNAME, LASTNAME, EMAIL from USERTABLE where EMAIL = (?)"
                 );
             }
 
@@ -162,6 +162,7 @@ public class UserDB {
 
             while (result.next()) {
                 if (role.equals("student")) {
+                    su.setUserId(result.getInt("ID"));
                     su.setFirstname(result.getString("FIRSTNAME"));
                     su.setLastname(result.getString("LASTNAME"));
                     su.setEmail(result.getString("EMAIL"));
@@ -169,6 +170,7 @@ public class UserDB {
                     su.setStudentId(result.getInt("STUDENT_ID"));
                 } else {
                     fu = new FacultyUser();
+                    fu.setUserId(result.getInt("ID"));
                     fu.setFirstname(result.getString("FIRSTNAME"));
                     fu.setLastname(result.getString("LASTNAME"));
                     fu.setEmail(result.getString("EMAIL"));
