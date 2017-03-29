@@ -18,7 +18,6 @@ import javax.sql.DataSource;
  *
  * @author cece
  */
-
 public class CourseDB {
 
     private DataSource db;
@@ -133,8 +132,8 @@ public class CourseDB {
             conn.close();
         }
     }
-    
-        public void delete(Course course) throws SQLException {
+
+    public void delete(Course course) throws SQLException {
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }

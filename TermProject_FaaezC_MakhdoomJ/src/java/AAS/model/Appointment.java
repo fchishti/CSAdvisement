@@ -6,22 +6,23 @@
 package AAS.model;
 
 import java.sql.Date;
+import org.joda.time.DateTime;
 
 /**
  *
  * @author faaez
  */
-class Appointment {
-    public int appointmentId;
+public class Appointment {
+    public int appointmentId; 
     public int facultyId;
-    public Date dateTime;
+    public DateTime dateTime;
     public String notes;
 
-    public Date getDateTime() {
+    public DateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(DateTime dateTime) {
         this.dateTime = dateTime;
     }
 
