@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h1>Register</h1>
+        <h:form>
+            <h:dataTable border="1" value="#{appointmentBean.list}" var="appointment">
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                    <h:outputText value="#{appointment.dateTime.year}"/>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Time</f:facet>
+                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Notes</f:facet>
+                    <h:outputText value="#{appointment.notes}" />
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Select</f:facet>
+                    <h:commandButton value="Select" action="#{appointmentBean.delete(appointment)}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+        <h:button value="Back" outcome="/studentFolder/index"/>
+    </h:body>
+</html>
+
