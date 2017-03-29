@@ -12,7 +12,10 @@ import java.sql.Date;
  * @author faaez
  */
 class Appointment {
+    public int appointmentId;
+    public int facultyId;
     public Date dateTime;
+    public String notes;
 
     public Date getDateTime() {
         return dateTime;
@@ -20,6 +23,30 @@ class Appointment {
 
     public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public int getFacultyId() {
+        return facultyId;
+    }
+
+    public void setFacultyId(int facultyId) {
+        this.facultyId = facultyId;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
     
 }
