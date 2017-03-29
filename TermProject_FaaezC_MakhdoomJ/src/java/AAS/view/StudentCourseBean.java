@@ -59,6 +59,7 @@ public class StudentCourseBean implements Serializable{
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        read();
         return null;
     }
     
@@ -68,6 +69,7 @@ public class StudentCourseBean implements Serializable{
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        read();
         return null;
     }
 
