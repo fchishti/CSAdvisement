@@ -6,7 +6,6 @@
 package AAS.controller;
 
 import AAS.model.Course;
-import AAS.model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,17 +16,18 @@ import javax.sql.DataSource;
 
 /**
  *
- * @author faaez
+ * @author cece
  */
-public class StudentCoursesDB {
+
+public class CourseDB {
 
     private DataSource db;
 
-    public StudentCoursesDB(DataSource db) {
+    public CourseDB(DataSource db) {
         this.db = db;
     }
 
-    public void create(User user, Course course) throws SQLException {
+    public void create(Course course) throws SQLException {
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -41,13 +41,15 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into STUDENTCOURSESTABLE(user_id, course_id)"
-                    + "values(?,?)"
+                    "insert into COURSETABLE(tite, courseprefix, code)"
+                    + "values(?,?,?)"
             );
 
-            ps.setInt(1, user.getUserId());
+            ps.setString(1, course.getTitle());
 
-            ps.setInt(2, course.getId());
+            ps.setString(2, course.getPrefix());
+
+            ps.setInt(3, course.getCode());
 
             int result = ps.executeUpdate();
 
@@ -60,7 +62,7 @@ public class StudentCoursesDB {
         }
     }
 
-    public List<Course> read(User user) throws SQLException {
+    public List<Course> read() throws SQLException {
 
         List<Course> list = new ArrayList<>();
 
@@ -76,12 +78,8 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                "select a.TITLE, a.COURSEPREFIX, a.CODE from COURSETABLE a" +
-                    "inner join STUDENTCOURSESTABLE b on a.ID = b.ID" +
-                    "where b.USER_ID = (?)"
+                    "select ID, TITLE, COURSEPREFIX, CODE from COURSETABLE"
             );
-            
-            ps.setInt(1, user.getUserId());
 
             ResultSet result = ps.executeQuery();
 
@@ -102,7 +100,41 @@ public class StudentCoursesDB {
         return list;
     }
 
-    public void delete(User user, Course course) throws SQLException {
+    public void update(Course course) throws SQLException {
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "update COURSETABLE set TITLE = (?), COURSEPREFIX = (?), CODE = (?)"
+                    + "where ID = (?)"
+            );
+
+            ps.setString(1, course.getTitle());
+            ps.setString(2, course.getPrefix());
+            ps.setInt(3, course.getCode());
+            ps.setInt(4, course.getId());
+
+            int result = ps.executeUpdate();
+
+            if (result != 1) {
+                throw new SQLException();
+            }
+
+        } finally {
+            conn.close();
+        }
+    }
+    
+        public void delete(Course course) throws SQLException {
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -115,11 +147,10 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "delete from STUDENTCOURSESTABLE where USER_ID = (?) AND COURSD_ID = (?)"
+                    "delete from COURSETABLE where ID = (?)"
             );
 
-            ps.setInt(1, user.getUserId());
-            ps.setInt(2, course.getId());
+            ps.setInt(1, course.getId());
 
             int result = ps.executeUpdate();
 

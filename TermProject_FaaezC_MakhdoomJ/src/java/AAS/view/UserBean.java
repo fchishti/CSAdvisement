@@ -22,9 +22,9 @@ import javax.sql.DataSource;
  *
  * @author cece
  */
-@Named(value = "crudBean")
+@Named(value = "userBean")
 @SessionScoped
-public class CrudBean implements Serializable{
+public class UserBean implements Serializable{
     
     @Resource(name="jdbc/ds_wsp")
     private DataSource ds;

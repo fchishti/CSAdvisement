@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
@@ -14,7 +15,26 @@
         <h:outputLabel value="#{StudentBean.user.studentId}"/><br/>
         <h:outputLabel value="#{StudentBean.user.majorCode}"/><br/>
         <br/><br/>
-        <h:button value="edit" outcome="/studentFolder/editInfo"/>
+        <h:form>
+        <h:dataTable border="1" value="#{studentCourseBean.list}" var="course">
+            <h:column>
+                <f:facet name="header">Code</f:facet>
+                <h:outputText value="#{course.code}"/>
+            </h:column>
+ 
+            <h:column>
+                <f:facet name="header">Title</f:facet>
+                <h:outputText value="#{course.title}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Prefix</f:facet>
+                <h:outputText value="#{course.prefix}" />
+            </h:column>
+        </h:dataTable>
+        </h:form>
+        <h:button value="Edit Info" outcome="/studentFolder/editInfo"/> <br/> <br/>
+        <h:button value="edit Courses" outcome="/studentFolder/editCourses"/> <br/>
         <h:link value="Logout" outcome="/logout" /> <br />
     </h:body>
 </html>
