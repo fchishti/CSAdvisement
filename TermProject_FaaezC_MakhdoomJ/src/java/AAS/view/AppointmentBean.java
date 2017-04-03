@@ -7,6 +7,7 @@ package AAS.view;
 
 import AAS.controller.AppointmentDB;
 import AAS.model.Appointment;
+import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -29,10 +30,12 @@ public class AppointmentBean implements Serializable{
     
     private AppointmentDB dataBase;
     private List<Appointment> list;
+    private CurrentUser user;
     
     @PostConstruct
     public void init(){
         dataBase = new AppointmentDB(ds);
+        user = new CurrentUser(ds);
         read();
     }
     
@@ -48,6 +51,16 @@ public class AppointmentBean implements Serializable{
     public String delete(Appointment appointment){
         try{
             dataBase.delete(appointment);
+        } catch (SQLException ex){
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        read();
+        return null;
+    }
+    
+    public String create(Appointment appointment){
+        try{
+            dataBase.create(appointment, user.getUser());
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }

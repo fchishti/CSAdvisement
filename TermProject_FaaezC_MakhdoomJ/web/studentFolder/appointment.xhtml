@@ -7,9 +7,46 @@
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h1>Register</h1>
+        <h1>Appointment</h1>
+        <h:form>
+            <h:dataTable border="1" value="#{studentAppointmentBean.list}" var="appointment">
+                <h:column>
+                    <f:facet name="header">Faculty</f:facet>
+                    <h:outputText value="#{appointment.facultyFirstname} "/>
+                    <h:outputText value="#{appointment.facultyLastname}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                    <h:outputText value="#{appointment.dateTime.year}"/>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Time</f:facet>
+                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Notes</f:facet>
+                    <h:outputText value="#{appointment.notes}" />
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <h:commandButton value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+        <div style="width:100%;height:50px;"></div>
         <h:form>
             <h:dataTable border="1" value="#{appointmentBean.list}" var="appointment">
+                <h:column>
+                    <f:facet name="header">Faculty</f:facet>
+                    <h:outputText value="#{appointment.facultyFirstname} "/>
+                    <h:outputText value="#{appointment.facultyLastname}"/>
+                </h:column>
                 <h:column>
                     <f:facet name="header">Date</f:facet>
                     <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
@@ -30,10 +67,11 @@
                 
                 <h:column>
                     <f:facet name="header">Select</f:facet>
-                    <h:commandButton value="Select" action="#{appointmentBean.delete(appointment)}"/>
+                    <h:commandButton value="Select" action="#{studentAppointmentBean.create(appointment)}"/>
                 </h:column>
             </h:dataTable>
         </h:form>
+        <div style="width:100%;height:50px;"></div>
         <h:button value="Back" outcome="/studentFolder/index"/>
     </h:body>
 </html>

@@ -88,7 +88,7 @@ public class AppointmentDB {
             PreparedStatement ps = conn.prepareStatement(
                     /* "select ID, USER_ID, EXTRACT(DAY from DATE), EXTRACT(MONTH from DATE), EXTRACT(YEAR from DATE), "
                     + "EXTRACT(HOUR from TIME), EXTRACT(MINUTE from TIME), EXTRACT(SECOND from TIME), NOTES from APPOINTMENTTABLE"*/
-                    "select ID, USER_ID, DATE, TIME, NOTES from APPOINTMENTTABLE"
+                    "select ID, FACULTYFIRSTNAME, FACULTYLASTNAME, USER_ID, DATE, TIME, NOTES from APPOINTMENTTABLE"
             );
 
             ResultSet result = ps.executeQuery();
@@ -98,6 +98,8 @@ public class AppointmentDB {
                 Appointment a = new Appointment();
                 a.setAppointmentId(result.getInt("ID"));
                 a.setFacultyId(result.getInt("ID"));
+                a.setFacultyFirstname(result.getString("FACULTYFIRSTNAME"));
+                a.setFacultyLastname(result.getString("FACULTYLASTNAME"));
 
                 Date date = result.getDate("DATE");
                 Time time = result.getTime("TIME");
