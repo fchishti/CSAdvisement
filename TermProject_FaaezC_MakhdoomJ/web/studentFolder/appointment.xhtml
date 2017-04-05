@@ -9,6 +9,13 @@
     <h:body>
         <h1>Appointment</h1>
         <h:form>
+            <h:selectOneMenu value="#{appointmentBean.facultyUser}">
+                <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}" itemValue="#{user}"/>
+            </h:selectOneMenu>
+            <h:commandButton value="View" action="#{appointmentBean.read()}"/>
+        </h:form>
+        
+        <h:form>
             <h:dataTable border="1" value="#{studentAppointmentBean.list}" var="appointment">
                 <h:column>
                     <f:facet name="header">Faculty</f:facet>

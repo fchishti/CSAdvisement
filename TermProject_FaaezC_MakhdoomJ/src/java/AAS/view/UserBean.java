@@ -24,61 +24,61 @@ import javax.sql.DataSource;
  */
 @Named(value = "userBean")
 @SessionScoped
-public class UserBean implements Serializable{
-    
-    @Resource(name="jdbc/ds_wsp")
+public class UserBean implements Serializable {
+
+    @Resource(name = "jdbc/ds_wsp")
     private DataSource ds;
-    
+
     private UserDB dataBase;
     private StudentUser user;
-    private List<StudentUser> list;
-    
+    private List<User> list;
+
     @PostConstruct
     public void init() {
         dataBase = new UserDB(ds);
         user = new StudentUser();
         read();
     }
-    
-    public String read(){
-        try{
+
+    public String read() {
+        try {
             this.list = dataBase.read();
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
-    public String create(){
-        try{
+
+    public String create() {
+        try {
             dataBase.create(user);
             return "/login";
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
-    public String delete(User user){
-        try{
+
+    public String delete(User user) {
+        try {
             dataBase.delete(user);
             return "/login";
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
-    public String update(User user){
-        try{
+
+    public String update(User user) {
+        try {
             dataBase.delete(user);
             return "/login";
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
-    
+
     public StudentUser getUser() {
         return user;
     }
@@ -87,7 +87,27 @@ public class UserBean implements Serializable{
         this.user = user;
     }
 
-    public List<StudentUser> getList() {
+    public List<User> getList() {
         return list;
     }
+
+//<editor-fold defaultstate="collapsed" desc="Misc Methods">
+    public String readFaculty() {
+        try {
+            this.list = dataBase.readFaculty();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String readStudent() {
+        try {
+            this.list = dataBase.readStudent();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+//</editor-fold>
 }

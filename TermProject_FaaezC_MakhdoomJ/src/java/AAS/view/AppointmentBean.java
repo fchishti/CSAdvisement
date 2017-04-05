@@ -6,12 +6,15 @@
 package AAS.view;
 
 import AAS.controller.AppointmentDB;
+import AAS.controller.UserDB;
 import AAS.model.Appointment;
+import AAS.model.User;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
@@ -24,56 +27,84 @@ import javax.sql.DataSource;
  */
 @Named(value = "appointmentBean")
 @SessionScoped
-public class AppointmentBean implements Serializable{
-    @Resource(name="jdbc/ds_wsp")
+public class AppointmentBean implements Serializable {
+
+    @Resource(name = "jdbc/ds_wsp")
     private DataSource ds;
-    
+
     private AppointmentDB dataBase;
+    private UserDB userDB;
     private List<Appointment> list;
+    private List<User> facultyList;
     private CurrentUser user;
-    
+    private User facultyUser;
+
     @PostConstruct
-    public void init(){
+    public void init() {
         dataBase = new AppointmentDB(ds);
+        userDB = new UserDB(ds);
         user = new CurrentUser(ds);
-        read();
+        readFaculty();
     }
-    
-    public String read(){
-        try{
-            list = dataBase.read();
-        } catch (SQLException ex){
+
+    public String readFaculty() {
+        try {
+            this.facultyList = userDB.readFaculty();
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
-    public String delete(Appointment appointment){
-        try{
+
+    public String read() {
+        
+        Logger logger = Logger.getLogger(getClass().getName());
+        logger.severe("severe");
+        logger.info(facultyUser.toString());
+        
+        logger.fine("fine");
+        try {
+            list = dataBase.read(facultyUser);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(AppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String delete(Appointment appointment) {
+        try {
             dataBase.delete(appointment);
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         read();
         return null;
     }
-    
-    public String create(Appointment appointment){
-        try{
+
+    public String create(Appointment appointment) {
+        try {
             dataBase.create(appointment, user.getUser());
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         read();
         return null;
+    }
+
+    public User getFacultyUser() {
+        return facultyUser;
+    }
+    
+    public void setFacultyUser(User facultyUser) {
+        this.facultyUser = facultyUser;
     }
 
     public List<Appointment> getList() {
         return list;
     }
 
-    public void setList(List<Appointment> list) {
-        this.list = list;
+    public List<User> getFacultyList() {
+        return facultyList;
     }
-        
+
 }
