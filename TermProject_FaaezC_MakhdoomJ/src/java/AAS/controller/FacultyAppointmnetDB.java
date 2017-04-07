@@ -48,7 +48,8 @@ public class FacultyAppointmnetDB {
             PreparedStatement ps = conn.prepareStatement(
                     /* "select ID, USER_ID, EXTRACT(DAY from DATE), EXTRACT(MONTH from DATE), EXTRACT(YEAR from DATE), "
                     + "EXTRACT(HOUR from TIME), EXTRACT(MINUTE from TIME), EXTRACT(SECOND from TIME), NOTES from APPOINTMENTTABLE"*/
-                    "select ID, FACULTYFIRSTNAME, FACULTYLASTNAME, USER_ID, DATE, TIME, NOTES from APPOINTMENTTABLE where USER_ID = (?)"
+                    "select APPOINTMENTTABLE.ID, FACULTYFIRSTNAME, FACULTYLASTNAME, APPOINTMENTTABLE.USER_ID, DATE, TIME, NOTES from APPOINTMENTTABLE " +
+                            "join STUDENTAPPOINTMENTTABLE on STUDENTAPPOINTMENTTABLE.APPOINTMENT_ID = APPOINTMENTTABLE.ID where APPOINTMENTTABLE.USER_ID = (?) "
             );
 
             ps.setInt(1, user.getUserId());
@@ -59,7 +60,7 @@ public class FacultyAppointmnetDB {
 
                 Appointment a = new Appointment();
                 a.setAppointmentId(result.getInt("ID"));
-                a.setFacultyId(result.getInt("ID"));
+                a.setFacultyId(result.getInt("USER_ID"));
                 a.setFacultyFirstname(result.getString("FACULTYFIRSTNAME"));
                 a.setFacultyLastname(result.getString("FACULTYLASTNAME"));
 
