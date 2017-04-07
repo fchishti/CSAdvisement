@@ -8,6 +8,7 @@ package AAS.view;
 import AAS.controller.AppointmentDB;
 import AAS.controller.UserDB;
 import AAS.model.Appointment;
+import AAS.model.FacultyUser;
 import AAS.model.User;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
@@ -44,6 +45,7 @@ public class AppointmentBean implements Serializable {
         dataBase = new AppointmentDB(ds);
         userDB = new UserDB(ds);
         user = new CurrentUser(ds);
+        facultyUser = new FacultyUser();
         readFaculty();
     }
 
@@ -57,12 +59,20 @@ public class AppointmentBean implements Serializable {
     }
 
     public String read() {
+// ---- Debug code ----- //
         
         Logger logger = Logger.getLogger(getClass().getName());
         logger.severe("severe");
-        logger.info(facultyUser.toString());
-        
+        logger.info(facultyUser.getLastname());
         logger.fine("fine");
+        
+        /*facultyUser.setUserId(2);
+        facultyUser.setEmail("hsung@uco.edu");
+        facultyUser.setFirstname("Hong");
+        facultyUser.setLastname("Sung");*/
+        
+// ---- Debug code ----- //
+        
         try {
             list = dataBase.read(facultyUser);
         } catch (SQLException ex) {
