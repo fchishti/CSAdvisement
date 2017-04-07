@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 public class CurrentUser {
 
     private UserDB database;
-    public User user;
+    private User user;
     private DataSource ds;
     private String role;
 

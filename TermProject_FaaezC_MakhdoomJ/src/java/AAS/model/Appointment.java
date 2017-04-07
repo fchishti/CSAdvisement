@@ -5,7 +5,6 @@
  */
 package AAS.model;
 
-import java.sql.Date;
 import org.joda.time.DateTime;
 
 /**
@@ -13,8 +12,11 @@ import org.joda.time.DateTime;
  * @author faaez
  */
 public class Appointment {
-    public int appointmentId; 
+
+    public int appointmentId;
     public int facultyId;
+    public String facultyFirstname;
+    public String facultyLastname;
     public DateTime dateTime;
     public String notes;
 
@@ -49,5 +51,21 @@ public class Appointment {
     public void setNotes(String notes) {
         this.notes = notes;
     }
-    
+
+    public String getFacultyFirstname() {
+        return facultyFirstname;
+    }
+
+    public void setFacultyFirstname(String facultyFirstname) {
+        this.facultyFirstname = facultyFirstname;
+    }
+
+    public String getFacultyLastname() {
+        return facultyLastname;
+    }
+
+    public void setFacultyLastname(String facultyLastname) {
+        this.facultyLastname = facultyLastname;
+    }
+
 }

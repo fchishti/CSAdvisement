@@ -86,9 +86,9 @@ public class UserDB {
         }
     }
 
-    public List<StudentUser> read() throws SQLException {
+    public List<User> read() throws SQLException {
 
-        List<StudentUser> list = new ArrayList<>();
+        List<User> list = new ArrayList<>();
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -108,8 +108,7 @@ public class UserDB {
             ResultSet result = ps.executeQuery();
 
             while (result.next()) {
-
-                StudentUser u = new StudentUser();
+                User u = new StudentUser();
                 u.setFirstname(result.getString("FIRSTNAME"));
                 u.setLastname(result.getString("LASTNAME"));
                 u.setEmail(result.getString("EMAIL"));
@@ -124,6 +123,170 @@ public class UserDB {
         return list;
     }
 
+    public void update(User user) throws SQLException {
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "update USERTABLE set FIRSTNAME = (?), LASTNAME = (?), EMAIL = (?) where ID = (?)"
+            );
+
+            ps.setString(1, user.getFirstname());
+            ps.setString(2, user.getLastname());
+            ps.setString(3, user.getEmail());
+            ps.setInt(4, user.getUserId());
+
+            int result = ps.executeUpdate();
+
+            if (user instanceof StudentUser) {
+                StudentUser student = (StudentUser) user;
+
+                PreparedStatement ps2 = conn.prepareStatement(
+                        "update STUDENTTABLE set STUDENT_ID = (?), MAJOR_CODE = (?) where USER_ID = (?)"
+                );
+
+                ps2.setInt(1, student.getStudentId());
+                ps2.setInt(2, student.getMajorCode());
+                ps2.setInt(3, user.getUserId());
+
+                int result2 = ps2.executeUpdate();
+
+                if (result2 != 1) {
+                    throw new SQLException();
+                }
+            }
+
+            if (result != 1) {
+                throw new SQLException();
+            }
+
+        } finally {
+            conn.close();
+        }
+    }
+
+    public void delete(User user) throws SQLException {
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "delete from USERTABLE where ID = (?)"
+            );
+
+            ps.setInt(1, user.getUserId());
+
+            int result = ps.executeUpdate();
+
+        } finally {
+            conn.close();
+        }
+    }
+
+//<editor-fold defaultstate="collapsed" desc="Misc Methods">
+    public List<User> readFaculty() throws SQLException {
+
+        List<User> list = new ArrayList<>();
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "select USERTABLE.ID, USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
+                    + "on USERTABLE.ID = GROUPTABLE.ID where GROUPTABLE.GROUPNAME = 'facultygroup'"
+            );
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+
+                FacultyUser u = new FacultyUser();
+                u.setUserId(result.getInt("ID"));
+                u.setFirstname(result.getString("FIRSTNAME"));
+                u.setLastname(result.getString("LASTNAME"));
+                u.setEmail(result.getString("EMAIL"));
+                u.setGroup(result.getString("GROUPNAME"));
+                list.add(u);
+            }
+
+        } finally {
+            conn.close();
+        }
+        return list;
+    }
+
+    public List<User> readStudent() throws SQLException {
+
+        List<User> list = new ArrayList<>();
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "select USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
+                    + "on USERTABLE.ID = GROUPTABLE.ID where GROUPTABLE.GROUPNAME = 'studentgroup'"
+            );
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+
+                StudentUser u = new StudentUser();
+                u.setUserId(result.getInt("ID"));
+                u.setFirstname(result.getString("FIRSTNAME"));
+                u.setLastname(result.getString("LASTNAME"));
+                u.setEmail(result.getString("EMAIL"));
+                u.setGroup(result.getString("GROUPNAME"));
+                list.add(u);
+            }
+
+        } finally {
+            conn.close();
+        }
+        return list;
+    }
+
+    /**
+     * Returns current logged in user
+     *
+     * @param username
+     * @param role
+     * @exception SQLException
+     * @return User
+     */
     public User readUser(String username, String role) throws SQLException {
 
         StudentUser su = new StudentUser();
@@ -187,90 +350,5 @@ public class UserDB {
             return fu;
         }
     }
-
-    public void update(User user) throws SQLException {
-        Logger logger = Logger.getLogger(getClass().getName());
-        logger.severe("severe");
-        logger.info(user.getEmail() + " " + user.getFirstname() + " " + user.getLastname());
-        logger.fine("fine");
-
-        if (db == null) {
-            throw new SQLException("db is null; Can't get data source");
-        }
-
-        Connection conn = db.getConnection();
-
-        if (conn == null) {
-            throw new SQLException("conn is null; Can't get db connection");
-        }
-
-        try {
-
-            PreparedStatement ps = conn.prepareStatement(
-                    "update USERTABLE set FIRSTNAME = (?), LASTNAME = (?), EMAIL = (?) where ID = (?)"
-            );
-
-            ps.setString(1, user.getFirstname());
-            ps.setString(2, user.getLastname());
-            ps.setString(3, user.getEmail());
-            ps.setInt(4, user.getUserId());
-
-            int result = ps.executeUpdate();
-
-            if (user instanceof StudentUser) {
-                StudentUser student = (StudentUser) user;
-
-                PreparedStatement ps2 = conn.prepareStatement(
-                        "update STUDENTTABLE set STUDENT_ID = (?), MAJOR_CODE = (?) where USER_ID = (?)"
-                );
-
-                ps2.setInt(1, student.getStudentId());
-                ps2.setInt(2, student.getMajorCode());
-                ps2.setInt(3, user.getUserId());
-
-                logger = Logger.getLogger(getClass().getName());
-                logger.severe("severe");
-                logger.info(user.getEmail() + " " + user.getFirstname() + " " + user.getLastname() + " " + user.getPassword()
-                        + " " + student.getStudentId() + " " + student.getMajorCode());
-
-                int result2 = ps2.executeUpdate();
-
-                if (result2 != 1) {
-                    throw new SQLException();
-                }
-            }
-
-            if (result != 1) {
-                throw new SQLException();
-            }
-
-        } finally {
-            conn.close();
-        }
-    }
-
-    public void delete(User user) throws SQLException {
-        if (db == null) {
-            throw new SQLException("db is null; Can't get data source");
-        }
-
-        Connection conn = db.getConnection();
-
-        if (conn == null) {
-            throw new SQLException("conn is null; Can't get db connection");
-        }
-
-        try {
-            PreparedStatement ps = conn.prepareStatement(
-                    "delete from USERTABLE where ID = (?)"
-            );
-
-            ps.setInt(1, user.getUserId());
-
-            int result = ps.executeUpdate();
-
-        } finally {
-            conn.close();
-        }
-    }
+//</editor-fold>
 }
