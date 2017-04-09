@@ -10,17 +10,16 @@
     <h:body>
         <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
             <b:navbarLinks>
-                <b:navLink value="Home" href="#"></b:navLink>
-                <b:navLink value="Courses" href="#"></b:navLink>
-                <b:navLink value="Appointments" href="#"></b:navLink>
+                <b:navLink value="Home" outcome="/studentFolder/index" ></b:navLink>
+                <b:navLink value="Courses" outcome="/studentFolder/editCourses"></b:navLink>
+                <b:navLink value="Appointments" outcome="/studentFolder/appointment"></b:navLink>
             </b:navbarLinks>
             <b:navbarLinks pull="right">
-                <b:navLink value="Logout" href="#"></b:navLink>
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
             </b:navbarLinks>
         </b:navBar>
         <b:container>
             <b:row>
-
                 <b:column span="3">
                     <b:thumbnail>
                         <img src="http://placehold.it/250x250" />
@@ -29,6 +28,7 @@
                     <p><b:icon name="envelope" /><h:outputLabel value="#{StudentBean.user.email}"/></p>
                     <p><b:icon name="credit-card" /><h:outputLabel value="#{StudentBean.user.studentId}"/></p>
                     <p><b:icon name="education" /><h:outputLabel value="#{StudentBean.user.majorCode}"/></p>
+                    <b:button icon="pencil" look="primary" value="Edit Info" outcome="/studentFolder/editInfo"/>
                 </b:column>
 
                 <b:column span="9">
@@ -85,12 +85,6 @@
 
                 </b:column>
             </b:row>
-            <div style="width:100%;height:50px;"></div>
-            <h:button value="Edit Info" outcome="/studentFolder/editInfo"/> <br/> <br/>
-            <h:button value="Edit Courses" outcome="/studentFolder/editCourses"/> <br/> <br/>
-            <h:button value="Manage Appointments" outcome="/studentFolder/appointment"/> <br/> <br/>
-            <h:link value="Logout" outcome="/logout" /> <br />
-
         </b:container>
     </h:body>
 </html>

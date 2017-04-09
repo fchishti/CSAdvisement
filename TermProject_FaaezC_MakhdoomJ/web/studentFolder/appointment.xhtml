@@ -10,11 +10,12 @@
         <h1>Appointment</h1>
         <h:form>
             <h:selectOneMenu value="#{appointmentBean.facultyUser}">
-                <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}" itemValue="#{user}"/>
+                <f:selectItem value="#{null}" itemLabel="---Select---"/>
+                <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}"/>
             </h:selectOneMenu>
             <h:commandButton value="View" action="#{appointmentBean.read()}"/>
         </h:form>
-        
+        <h:outputText value="#{appointmentBean.facultyUser}"> </h:outputText>
         <h:form>
             <h:dataTable border="1" value="#{studentAppointmentBean.list}" var="appointment">
                 <h:column>
