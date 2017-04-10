@@ -90,7 +90,7 @@ public class StudentAppointmentDB {
 
                 Appointment a = new Appointment();
                 a.setAppointmentId(result.getInt("ID"));
-                a.setFacultyId(result.getInt("ID"));
+                a.setFacultyId(result.getInt("USER_ID"));
                 a.setFacultyFirstname(result.getString("FACULTYFIRSTNAME"));
                 a.setFacultyLastname(result.getString("FACULTYLASTNAME"));
                 

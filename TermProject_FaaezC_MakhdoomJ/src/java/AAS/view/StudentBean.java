@@ -6,12 +6,14 @@
 package AAS.view;
 
 import AAS.controller.UserDB;
+import AAS.model.FacultyUser;
 import AAS.model.StudentUser;
 import AAS.model.User;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.enterprise.context.SessionScoped;
@@ -31,31 +33,53 @@ public class StudentBean implements Serializable {
 
     private CurrentUser currentUser;
 
-    private StudentUser user;
-    
+    private StudentUser studentUser;
+
+    private FacultyUser facultyUser;
+
     private UserDB dataBase;
 
     @PostConstruct
     public void init() {
         currentUser = new CurrentUser(ds);
-        user = (StudentUser) currentUser.getUser();
+        studentUser = (StudentUser) currentUser.getUser();
         dataBase = new UserDB(ds);
+        facultyUser = new FacultyUser();
     }
 
-    public StudentUser getUser() {
-        return user;
+    public StudentUser getStudentUser() {
+        return studentUser;
     }
 
-    public void setUser(StudentUser user) {
-        this.user = user;
+    public void setStudentUser(StudentUser studentUser) {
+        this.studentUser = studentUser;
     }
-    
-    public String update(){
-        try{
-            setUser(user);
-            dataBase.update(user);
+
+    public String update() {
+        try {
+            setStudentUser(studentUser);
+            dataBase.update(studentUser);
             return "/studentFolder/index";
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    public FacultyUser getFacultyUser() {
+        return facultyUser;
+    }
+
+    public void setFacultyUser(FacultyUser facultyUser) {
+        this.facultyUser = facultyUser;
+    }
+
+    public String readFaculty(int userId) {
+
+        try {
+            facultyUser = (FacultyUser) dataBase.readUserFromId(userId, "faculty");
+            return "/studentFolder/faculty";
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }

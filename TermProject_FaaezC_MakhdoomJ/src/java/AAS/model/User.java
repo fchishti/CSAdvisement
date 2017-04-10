@@ -17,8 +17,8 @@ public abstract class User {
     public String password;
     public int userId;
     public String group;
-    
-    public User(){
+
+    public User() {
     }
 
     public String getFirstname() {
@@ -68,5 +68,13 @@ public abstract class User {
     public void setGroup(String group) {
         this.group = group;
     }
-    
+
+    @Override
+    public String toString() {
+        return this.firstname + " "
+                + this.lastname + " "
+                + this.email + " "
+                + this.group;
+    }
+
 }

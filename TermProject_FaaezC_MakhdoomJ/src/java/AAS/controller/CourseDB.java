@@ -40,7 +40,7 @@ public class CourseDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into COURSETABLE(tite, courseprefix, code)"
+                    "insert into COURSETABLE(title, courseprefix, code)"
                     + "values(?,?,?)"
             );
 

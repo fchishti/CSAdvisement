@@ -1,17 +1,52 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         Hello from Faculty pages
         <br />
-        <h:outputLabel value="#{FacultyBean.user.firstname}"/><br />
-        <h:outputLabel value="#{FacultyBean.user.lastname}"/><br />
-        <h:outputLabel value="#{FacultyBean.user.email}"/><br />
+        <h:outputLabel value="#{FacultyBean.facultyUser.firstname}"/><br />
+        <h:outputLabel value="#{FacultyBean.facultyUser.lastname}"/><br />
+        <h:outputLabel value="#{FacultyBean.facultyUser.email}"/><br />
         <div style="width:100%;height:50px;"></div>
+                    <b:panel title="Appointment" look="primary">
+                        <h:form>
+                            <b:dataTable searching="false" paginated="false" value="#{facultyAppointmentBean.list}" var="appointment">
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Faculty</f:facet>
+                                    <h:commandLink action="#{FacultyBean.readStudent(appointment.user.userId)}">
+                                        <h:outputText value="#{appointment.user.firstname} "/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{FacultyBean.readStudent(appointment.user.userId)}">
+                                        <h:outputText value="#{appointment.user.lastname}"/>
+                                    </h:commandLink>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.year}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.minuteOfHour}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.appointment.notes}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+
+                        </h:form>
+                    </b:panel>
         <h:button value="Edit Info" outcome="/facultyFolder/editInfo"/> <br/> <br/>
         <h:link value="Logout" outcome="/logout" /> <br />
     </h:body>

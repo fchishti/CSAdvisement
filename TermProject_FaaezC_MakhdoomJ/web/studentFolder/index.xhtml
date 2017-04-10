@@ -24,10 +24,10 @@
                     <b:thumbnail>
                         <img src="http://placehold.it/250x250" />
                     </b:thumbnail>
-                    <p><h:outputLabel value="#{StudentBean.user.firstname} #{StudentBean.user.lastname}"/></p><hr/>
-                    <p><b:icon name="envelope" /><h:outputLabel value="#{StudentBean.user.email}"/></p>
-                    <p><b:icon name="credit-card" /><h:outputLabel value="#{StudentBean.user.studentId}"/></p>
-                    <p><b:icon name="education" /><h:outputLabel value="#{StudentBean.user.majorCode}"/></p>
+                    <p><h:outputLabel value="#{StudentBean.studentUser.firstname} #{StudentBean.studentUser.lastname}"/></p><hr/>
+                    <p><b:icon name="envelope" /><h:outputLabel value="#{StudentBean.studentUser.email}"/></p>
+                    <p><b:icon name="credit-card" /><h:outputLabel value="#{StudentBean.studentUser.studentId}"/></p>
+                    <p><b:icon name="education" /><h:outputLabel value="#{StudentBean.studentUser.majorCode}"/></p>
                     <b:button icon="pencil" look="primary" value="Edit Info" outcome="/studentFolder/editInfo"/>
                 </b:column>
 
@@ -58,8 +58,12 @@
                             <b:dataTable searching="false" paginated="false" value="#{studentAppointmentBean.list}" var="appointment">
                                 <b:dataTableColumn orderable="false">
                                     <f:facet name="header">Faculty</f:facet>
-                                    <h:outputText value="#{appointment.facultyFirstname} "/>
-                                    <h:outputText value="#{appointment.facultyLastname}"/>
+                                    <h:commandLink action="#{StudentBean.readFaculty(appointment.facultyId)}">
+                                        <h:outputText value="#{appointment.facultyFirstname} "/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{StudentBean.readFaculty(appointment.facultyId)}">
+                                        <h:outputText value="#{appointment.facultyLastname}"/>
+                                    </h:commandLink>
                                 </b:dataTableColumn>
                                 <b:dataTableColumn orderable="false">
                                     <f:facet name="header">Date</f:facet>

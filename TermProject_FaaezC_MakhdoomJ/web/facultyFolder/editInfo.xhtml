@@ -11,15 +11,15 @@
             <h:form>
                 <h:panelGrid>
                     <h:outputLabel for="firstname" value="firstname" />
-                    <h:inputText id="firstname" value="#{FacultyBean.user.firstname}"/>
+                    <h:inputText id="firstname" value="#{FacultyBean.facultyUser.firstname}"/>
                     <h:message for="firstname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="lastname" value="lastname" />
-                    <h:inputText id="lastname" value="#{FacultyBean.user.lastname}"/>
+                    <h:inputText id="lastname" value="#{FacultyBean.facultyUser.lastname}"/>
                     <h:message for="lastname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="email" value="email" />
-                    <h:inputText id="email" value="#{FacultyBean.user.email}"/>
+                    <h:inputText id="email" value="#{FacultyBean.facultyUser.email}"/>
                     <h:message for="email" errorStyle="color:red"/>
 
                     <h:commandButton value="Save" action="#{FacultyBean.update()}"/> <br/>

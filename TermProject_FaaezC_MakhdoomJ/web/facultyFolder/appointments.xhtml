@@ -10,7 +10,7 @@
         <h1>Appointments</h1>
         
         <h:form>
-            <h:dataTable border="1" value="#{appointmentBean.list}" var="appointment">
+            <h:dataTable border="1" value="#{facultyAppointmentBean.list}" var="appointment">
                 <h:column>
                     <f:facet name="header">Faculty</f:facet>
                     <h:outputText value="#{appointment.facultyFirstname} "/>

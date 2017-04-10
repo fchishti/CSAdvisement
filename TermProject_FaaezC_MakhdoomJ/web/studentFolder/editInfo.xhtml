@@ -11,23 +11,23 @@
             <h:form>
                 <h:panelGrid>
                     <h:outputLabel for="firstname" value="firstname" />
-                    <h:inputText id="firstname" value="#{StudentBean.user.firstname}"/>
+                    <h:inputText id="firstname" value="#{StudentBean.studentUser.firstname}"/>
                     <h:message for="firstname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="lastname" value="lastname" />
-                    <h:inputText id="lastname" value="#{StudentBean.user.lastname}"/>
+                    <h:inputText id="lastname" value="#{StudentBean.studentUser.lastname}"/>
                     <h:message for="lastname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="email" value="email" />
-                    <h:inputText id="email" value="#{StudentBean.user.email}"/>
+                    <h:inputText id="email" value="#{StudentBean.studentUser.email}"/>
                     <h:message for="email" errorStyle="color:red"/>
                     
                     <h:outputLabel for="studentid" value="student ID." />
-                    <h:inputText id="studentid" value="#{StudentBean.user.studentId}"/>
+                    <h:inputText id="studentid" value="#{StudentBean.studentUser.studentId}"/>
                     <h:message for="studentid" errorStyle="color:red"/>
                     
                     <h:outputLabel for="majorcode" value="major code" />
-                    <h:inputText id="majorcode" value="#{StudentBean.user.majorCode}"/>
+                    <h:inputText id="majorcode" value="#{StudentBean.studentUser.majorCode}"/>
                     <h:message for="majorcode" errorStyle="color:red"/>
 
                     <h:commandButton value="Save" action="#{StudentBean.update()}"/> <br/>

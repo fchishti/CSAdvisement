@@ -77,10 +77,10 @@ public class StudentCourseDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                "select COURSETABLE.ID, COURSETABLE.TITLE, COURSETABLE.COURSEPREFIX, COURSETABLE.CODE from COURSETABLE " +
-                    "inner join STUDENTCOURSESTABLE on COURSETABLE.ID = STUDENTCOURSESTABLE.ID where STUDENTCOURSESTABLE.USER_ID = (?)"
+                    "select COURSETABLE.ID, COURSETABLE.TITLE, COURSETABLE.COURSEPREFIX, COURSETABLE.CODE from COURSETABLE "
+                    + "inner join STUDENTCOURSESTABLE on COURSETABLE.ID = STUDENTCOURSESTABLE.ID where STUDENTCOURSESTABLE.USER_ID = (?)"
             );
-            
+
             ps.setInt(1, user.getUserId());
 
             ResultSet result = ps.executeQuery();
@@ -93,11 +93,8 @@ public class StudentCourseDB {
                 c.setPrefix(result.getString("COURSEPREFIX"));
                 c.setCode(result.getInt("CODE"));
                 list.add(c);
-                
-                
+
             }
-            
-             
 
         } finally {
             conn.close();
@@ -130,5 +127,46 @@ public class StudentCourseDB {
         } finally {
             conn.close();
         }
+    }
+
+    public List<Course> readFromId(int userId) throws SQLException{
+        List<Course> list = new ArrayList<>();
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "select COURSETABLE.ID, COURSETABLE.TITLE, COURSETABLE.COURSEPREFIX, COURSETABLE.CODE from COURSETABLE "
+                    + "inner join STUDENTCOURSESTABLE on COURSETABLE.ID = STUDENTCOURSESTABLE.ID where STUDENTCOURSESTABLE.USER_ID = (?)"
+            );
+
+            ps.setInt(1, userId);
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+
+                Course c = new Course();
+                c.setId(result.getInt("ID"));
+                c.setTitle(result.getString("TITLE"));
+                c.setPrefix(result.getString("COURSEPREFIX"));
+                c.setCode(result.getInt("CODE"));
+                list.add(c);
+
+            }
+
+        } finally {
+            conn.close();
+        }
+
+        return list;
     }
 }
