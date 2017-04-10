@@ -13,7 +13,6 @@
                 <f:selectItem value="#{null}" itemLabel="---Select---"/>
                 <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}"/>
             </h:selectOneMenu>
-            <h:commandButton value="View" action="#{appointmentBean.read()}"/>
         </h:form>
         <h:outputText value="#{appointmentBean.facultyUser}"> </h:outputText>
         <h:form>
@@ -46,6 +45,8 @@
                     <h:commandButton value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
                 </h:column>
             </h:dataTable>
+            
+            
         </h:form>
         <div style="width:100%;height:50px;"></div>
         <h:form>
