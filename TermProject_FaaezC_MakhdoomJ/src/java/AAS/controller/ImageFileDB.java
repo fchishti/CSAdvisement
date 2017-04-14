@@ -45,7 +45,7 @@ public class ImageFileDB {
             );
             while (result.next()) {
                 ImageFile file = new ImageFile();
-                file.setId(result.getLong("ID"));
+                file.setId(result.getInt("ID"));
                 file.setName(result.getString("FILE_NAME"));
                 file.setType(result.getString("FILE_TYPE"));
                 file.setSize(result.getLong("FILE_SIZE"));
@@ -75,7 +75,7 @@ public class ImageFileDB {
             insertQuery.setString(2, part.getContentType());
             insertQuery.setLong(3, part.getSize());
             insertQuery.setBinaryStream(4, inputStream);
-            insertQuery.setInt(5,user.getUserId());
+            insertQuery.setInt(5, user.getUserId());
 
             int result = insertQuery.executeUpdate();
             if (result == 1) {
@@ -102,8 +102,8 @@ public class ImageFileDB {
             }
         }
     }
-    
-    public void delete(ImageFile imageFile) throws SQLException{
+
+    public void delete(ImageFile imageFile) throws SQLException {
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -119,12 +119,55 @@ public class ImageFileDB {
                     "delete from IMAGETABLE where ID = (?)"
             );
 
-            ps.setInt(1, imageFile.getId());
+            ps.setLong(1, imageFile.getId());
 
             int result = ps.executeUpdate();
 
         } finally {
             conn.close();
+        }
+    }
+
+    public void update(Part part, User user) throws IOException, SQLException {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        Connection conn = db.getConnection();
+
+        InputStream inputStream;
+        inputStream = null;
+        try {
+            inputStream = part.getInputStream();
+            PreparedStatement ps = conn.prepareStatement(
+                    "UPDATE IMAGETABLE SET FILE_NAME = (?), FILE_TYPE = (?), FILE_SIZE = (?), FILE_CONTENTS = (?) WHERE USER_ID = (?) ");
+            ps.setString(1, part.getSubmittedFileName());
+            ps.setString(2, part.getContentType());
+            ps.setLong(3, part.getSize());
+            ps.setBinaryStream(4, inputStream);
+            ps.setInt(5, user.getUserId());
+
+            int result = ps.executeUpdate();
+            if (result == 1) {
+                facesContext.addMessage("uploadForm:upload",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO,
+                                part.getSubmittedFileName()
+                                + ": uploaded successfuly !!", null));
+            } else {
+                // if not 1, it must be an error.
+                facesContext.addMessage("uploadForm:upload",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                result + " file uploaded", null));
+            }
+        } catch (IOException e) {
+            facesContext.addMessage("uploadForm:upload",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "File upload failed !!", null));
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
     }
 }

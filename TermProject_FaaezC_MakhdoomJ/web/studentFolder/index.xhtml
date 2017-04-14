@@ -6,6 +6,15 @@
       xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>Facelet Title</title>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('button').click(function(){
+                    if(this.id.toString().includes("fileButton")){
+                        $('input[type=file]').trigger('click');
+                    }
+                });
+            });
+        </script>
     </h:head>
     <h:body>
         <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
@@ -19,10 +28,29 @@
             </b:navbarLinks>
         </b:navBar>
         <b:container>
+            <b:modal id="amodal" title="Update Profile Picture" styleClass="modalPseudoClass">
+                <h:form enctype="multipart/form-data">
+                    <b:button size="lg"  id="fileButton"  icon="plus" value="Choose" look="primary"/>
+                    <h:inputFile style="visibility:hidden;" id="file" label="file" value="#{imageFileBean.part}" validator="#{imageFileBean.validateFile}" />
+                    <b:message for="file" errorStyle="color: red" infoStyle="color: blue"/>
+                    <b:commandButton icon="upload" id="upload" action="#{imageFileBean.upload()}" value="Upload" />
+                    <b:message for="upload" errorStyle="color: red" infoStyle="color: blue" />
+                </h:form>
+                <f:facet name="footer">
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                </f:facet>
+            </b:modal>
             <b:row>
                 <b:column span="3">
                     <b:thumbnail>
-                        <img src="http://placehold.it/250x250" />
+                        <div style="position:relative;">
+                            <img style="width:250px; height:250px;" src="../ImageServlet" />
+                            <div style="position:absolute; bottom:5px; right: 10px; " >
+                                <a style="color:rgba(0,0,0,0.3)" id="atrigger" href="#amodal" data-toggle="modal">
+                                    <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="camera" />
+                                </a>
+                            </div>
+                        </div>
                     </b:thumbnail>
                     <p><h:outputLabel value="#{StudentBean.studentUser.firstname} #{StudentBean.studentUser.lastname}"/></p><hr/>
                     <p><b:icon name="envelope" /><h:outputLabel value="#{StudentBean.studentUser.email}"/></p>

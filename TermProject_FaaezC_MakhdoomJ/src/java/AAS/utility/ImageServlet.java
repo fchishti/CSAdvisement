@@ -3,6 +3,7 @@ package AAS.utility;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,7 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int fileID = Integer.parseInt(request.getParameter("fileid"));
+        CurrentUser user = new CurrentUser(ds);
         String inLineParam = request.getParameter("inline");
         boolean inLine = false;
         if (inLineParam != null && inLineParam.equals("true")) {
@@ -36,12 +37,13 @@ public class ImageServlet extends HttpServlet {
         try {
             Connection conn = ds.getConnection();
             PreparedStatement selectQuery = conn.prepareStatement(
-                    "SELECT * FROM FILETABLE WHERE FILE_ID=?");
-            selectQuery.setInt(1, fileID);
+                    "SELECT * FROM IMAGETABLE WHERE USER_ID=?");
+            selectQuery.setInt(1, user.getUser().getUserId());
 
             ResultSet result = selectQuery.executeQuery();
             if (!result.next()) {
-                System.out.println("***** SELECT query failed for ImageServlet");
+                response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+                response.setHeader("Location", "http://placehold.it/250x250");
             }
 
             String fileType = result.getString("FILE_TYPE");
@@ -73,7 +75,8 @@ public class ImageServlet extends HttpServlet {
             conn.close();
 
         } catch (SQLException e) {
-
+            response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
+            response.setHeader("Location", "http://placehold.it/250x250");
         }
     }
 

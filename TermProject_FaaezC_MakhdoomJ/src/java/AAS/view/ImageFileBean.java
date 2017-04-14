@@ -29,7 +29,7 @@ import javax.sql.DataSource;
  *
  * @author fchishti-sw
  */
-@Named
+@Named(value = "imageFileBean")
 @SessionScoped
 public class ImageFileBean implements Serializable {
 
