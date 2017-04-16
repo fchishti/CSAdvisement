@@ -2,17 +2,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>admin</title>
     </h:head>
     <h:body>
-        <h1>admin page</h1>
-        <h:link value="Go Home" outcome="/facultyFolder/index" /><br />
-        <h:link value="Logout" outcome="/logout" />
-
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/adminFolder/index" ></b:navLink>
+                <b:navLink value="Manage Courses" outcome="/adminFolder/manageCourses"></b:navLink>
+                <b:navLink value="Manage Users" outcome="/adminFolder/dbmanage"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
         <h:form>
-            <h:dataTable border="1" value="#{courseBean.list}" var="course">
+            <b:dataTable searching="false" paginated="false" border="1" value="#{courseBean.list}" var="course">
                 <h:column>
                     <f:facet name="header">Code</f:facet>
                     <h:outputText value="#{course.code}"/>
@@ -29,14 +37,15 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Edit</f:facet>
-                    <h:commandButton value="Edit" action="#{courseBean.editCourse(course)}"/>
+                    <b:commandButton value="Edit" action="#{courseBean.editCourse(course)}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Delete</f:facet>
-                    <h:commandButton value="Delete" action="#{courseBean.delete(course)}"/>
+                    <b:commandButton look="danger" value="Delete" action="#{courseBean.delete(course)}"/>
                 </h:column>
-            </h:dataTable>
+            </b:dataTable>
         </h:form>
+        </b:container>
     </h:body>
 </html>
 

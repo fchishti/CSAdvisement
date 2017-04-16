@@ -51,11 +51,13 @@ public class CourseBean implements Serializable {
     public String create() {
         try {
             dataBase.create(course);
+            read();
+            return "adminFolder/manageCourses";
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
-        read();
-        return null;
+        
     }
 
     public String delete(Course course) {

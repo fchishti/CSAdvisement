@@ -72,5 +72,5 @@ public class StudentAppointmentBean implements Serializable {
     public List<Appointment> getList() {
         return list;
     }
-
+ 
 }

@@ -2,32 +2,41 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>admin</title>
     </h:head>
     <h:body>
-        <h1>admin page</h1>
-        <h:link value="Go Home" outcome="/index" /><br />
-        <h:link value="Logout" outcome="/logout" />
-
-        <h:form>
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/adminFolder/index" ></b:navLink>
+                <b:navLink value="Manage Courses" outcome="/adminFolder/manageCourses"></b:navLink>
+                <b:navLink value="Manage Users" outcome="/adminFolder/dbmanage"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+        <b:form>
             <h:panelGrid>
                     <h:outputLabel for="Title" value="Title" />
-                    <h:inputText  value="#{courseBean.course.title}"/>
+                    <b:inputText  value="#{courseBean.course.title}"/>
                     <h:message for="title" errorStyle="color:red"/>
                     
                     <h:outputLabel for="prefix" value="Prefix" />
-                    <h:inputText  value="#{courseBean.course.prefix}"/>
+                    <b:inputText  value="#{courseBean.course.prefix}"/>
                     <h:message for="prefix" errorStyle="color:red"/>
                     
                     <h:outputLabel for="code" value="Code" />
-                    <h:inputText  value="#{courseBean.course.code}"/>
+                    <b:inputText  value="#{courseBean.course.code}"/>
                     <h:message for="code" errorStyle="color:red"/>
 
-                    <h:commandButton value="Save" action="#{courseBean.update()}"/>
+                    <b:commandButton value="Save" action="#{courseBean.update()}"/>
                 </h:panelGrid>
-        </h:form>
+        </b:form>
+        </b:container>
     </h:body>
 </html>
 
