@@ -21,7 +21,7 @@
             <b:row>
                 <b:column span="3">
                     <b:thumbnail>
-                        <img src="http://placehold.it/250x250" />
+                        <img style="width:250px; height:250px;" src="../ImageServlet?id=#{FacultyBean.studentUser.userId}" />
                     </b:thumbnail>
                     <p><h:outputLabel value="#{FacultyBean.studentUser.firstname} #{FacultyBean.studentUser.lastname}"/></p><hr/>
                     <p><b:icon name="envelope" /><h:outputLabel value="#{FacultyBean.studentUser.email}"/></p>

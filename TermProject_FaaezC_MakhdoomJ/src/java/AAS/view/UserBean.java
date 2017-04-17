@@ -8,6 +8,7 @@ package AAS.view;
 import AAS.controller.UserDB;
 import AAS.model.StudentUser;
 import AAS.model.User;
+import AAS.utility.Email;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -32,11 +33,13 @@ public class UserBean implements Serializable {
     private UserDB dataBase;
     private StudentUser user;
     private List<User> list;
+    private Email email;
 
     @PostConstruct
     public void init() {
         dataBase = new UserDB(ds);
         user = new StudentUser();
+        email = new Email(ds);
         read();
     }
 
@@ -52,6 +55,7 @@ public class UserBean implements Serializable {
     public String create() {
         try {
             dataBase.create(user);
+            email.sendAuthCode(user);
             return "/login";
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);

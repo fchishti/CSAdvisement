@@ -55,13 +55,23 @@ public class ImageFileBean implements Serializable {
             Logger.getLogger(ImageFileBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void upload() throws SQLException {
+
+    public String upload() throws SQLException {
         try {
-            imageFileDB.uploadFile(part, currentUser.getUser());
+            imageFileDB.upload(part, currentUser.getUser());
         } catch (SQLException | IOException ex) {
             Logger.getLogger(ImageFileBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
+    }
+
+    public String delete() throws SQLException {
+        try {
+            imageFileDB.delete(currentUser.getUser());
+        } catch (SQLException ex) {
+            Logger.getLogger(ImageFileBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public void validateFile(FacesContext ctx, UIComponent comp, Object value) {

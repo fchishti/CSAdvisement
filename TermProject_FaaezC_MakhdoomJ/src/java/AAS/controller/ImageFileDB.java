@@ -58,7 +58,30 @@ public class ImageFileDB {
         return files;
     }
 
-    public void uploadFile(Part part, User user) throws IOException, SQLException {
+    public void upload(Part part, User user) throws IOException, SQLException {
+        Connection conn = db.getConnection();
+        boolean exists = false;
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet result = stmt.executeQuery(
+                    "SELECT USER_ID FROM IMAGETABLE"
+            );
+            while (result.next()) {
+                if (result.getInt("USER_ID") == user.getUserId()) {
+                    update(part, user);
+                    exists = true;
+                }
+            }
+
+            if (!exists) {
+                uploadFile(part, user);
+            }
+        } finally {
+            conn.close();
+        }
+    }
+
+    private void uploadFile(Part part, User user) throws IOException, SQLException {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
@@ -103,7 +126,7 @@ public class ImageFileDB {
         }
     }
 
-    public void delete(ImageFile imageFile) throws SQLException {
+    public void delete(User user) throws SQLException {
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -116,10 +139,10 @@ public class ImageFileDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "delete from IMAGETABLE where ID = (?)"
+                    "delete from IMAGETABLE where USER_ID = (?)"
             );
 
-            ps.setLong(1, imageFile.getId());
+            ps.setLong(1, user.getUserId());
 
             int result = ps.executeUpdate();
 
@@ -128,7 +151,7 @@ public class ImageFileDB {
         }
     }
 
-    public void update(Part part, User user) throws IOException, SQLException {
+    private void update(Part part, User user) throws IOException, SQLException {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Connection conn = db.getConnection();

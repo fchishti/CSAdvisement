@@ -5,6 +5,7 @@
  */
 package AAS.view;
 
+import AAS.controller.AuthDB;
 import AAS.controller.StudentAppointmentDB;
 import AAS.model.Appointment;
 import AAS.utility.CurrentUser;
@@ -32,19 +33,26 @@ public class StudentAppointmentBean implements Serializable {
     private StudentAppointmentDB dataBase;
     private List<Appointment> list;
     private CurrentUser user;
+    private AuthDB authDB;
+
+    private boolean isAuthrozied;
 
     @PostConstruct
     public void init() {
         dataBase = new StudentAppointmentDB(ds);
         user = new CurrentUser(ds);
+        authDB = new AuthDB(ds);
+        isAuthrozied = checkAuth();
         read();
     }
 
     public String create(Appointment appointment) {
-        try {
-            dataBase.create(appointment, user.getUser());
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        if (isAuthrozied) {
+            try {
+                dataBase.create(appointment, user.getUser());
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         read();
         return null;
@@ -60,10 +68,12 @@ public class StudentAppointmentBean implements Serializable {
     }
 
     public String delete(Appointment appointment) {
-        try {
-            dataBase.delete(appointment, user.getUser());
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        if (isAuthrozied) {
+            try {
+                dataBase.delete(appointment, user.getUser());
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         read();
         return null;
@@ -72,5 +82,14 @@ public class StudentAppointmentBean implements Serializable {
     public List<Appointment> getList() {
         return list;
     }
- 
+
+    public boolean checkAuth() {
+        try {
+            return authDB.isAuthroized(user.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
 }

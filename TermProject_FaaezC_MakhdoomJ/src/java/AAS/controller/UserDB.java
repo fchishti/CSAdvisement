@@ -256,7 +256,7 @@ public class UserDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "select USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
+                    "select USERTABLE.ID, USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
                     + "on USERTABLE.ID = GROUPTABLE.ID where GROUPTABLE.GROUPNAME = 'studentgroup'"
             );
 

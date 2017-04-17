@@ -5,6 +5,7 @@
  */
 package AAS.view;
 
+import AAS.controller.AuthDB;
 import AAS.controller.StudentAppointmentDB;
 import AAS.controller.UserDB;
 import AAS.model.Appointment;
@@ -41,10 +42,16 @@ public class StudentBean implements Serializable {
     private FacultyUser facultyUser;
 
     private UserDB dataBase;
-    
+
     private List<Appointment> appointments;
-    
+
     private StudentAppointmentDB studentAppointmentDB;
+
+    private AuthDB authDB;
+
+    private int code;
+
+    private String message;
 
     @PostConstruct
     public void init() {
@@ -53,6 +60,7 @@ public class StudentBean implements Serializable {
         dataBase = new UserDB(ds);
         studentAppointmentDB = new StudentAppointmentDB(ds);
         facultyUser = new FacultyUser();
+        authDB = new AuthDB(ds);
     }
 
     public StudentUser getStudentUser() {
@@ -97,12 +105,61 @@ public class StudentBean implements Serializable {
     public List<Appointment> getAppointments() {
         return appointments;
     }
-    
-    private void readFacultyAppointments(int facultyId){
+
+    private void readFacultyAppointments(int facultyId) {
         try {
             appointments = studentAppointmentDB.readFacultyAppointment(currentUser.getUser(), facultyId);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String authorize() {
+        int storedCode = 0;
+
+        try {
+            storedCode = authDB.readCode(currentUser.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (storedCode == code) {
+            try {
+                authDB.authorize(currentUser.getUser());
+                return "/studentFolder/index";
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        } else {
+            message = "wrong code";
+            return null;
+        }
+
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isAuthorized() {
+        try {
+            return authDB.isAuthroized(currentUser.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
         }
     }
 

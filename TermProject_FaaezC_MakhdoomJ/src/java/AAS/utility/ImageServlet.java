@@ -27,23 +27,32 @@ public class ImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        int id = 0;
+        
         CurrentUser user = new CurrentUser(ds);
         String inLineParam = request.getParameter("inline");
+        String idParam = request.getParameter("id");
         boolean inLine = false;
         if (inLineParam != null && inLineParam.equals("true")) {
             inLine = true;
+        }
+        
+        if(idParam != null){
+            id = Integer.parseInt(idParam);
+        } else {
+            id = user.getUser().getUserId();
         }
 
         try {
             Connection conn = ds.getConnection();
             PreparedStatement selectQuery = conn.prepareStatement(
                     "SELECT * FROM IMAGETABLE WHERE USER_ID=?");
-            selectQuery.setInt(1, user.getUser().getUserId());
+            selectQuery.setInt(1, id);
 
             ResultSet result = selectQuery.executeQuery();
             if (!result.next()) {
                 response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-                response.setHeader("Location", "http://placehold.it/250x250");
+                response.setHeader("Location", "http://placehold.it/250x250?text=Upload%20an%20image");
             }
 
             String fileType = result.getString("FILE_TYPE");
@@ -76,7 +85,7 @@ public class ImageServlet extends HttpServlet {
 
         } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_MOVED_TEMPORARILY);
-            response.setHeader("Location", "http://placehold.it/250x250");
+            response.setHeader("Location", "http://placehold.it/250x250?text=Upload%20an%20image");
         }
     }
 

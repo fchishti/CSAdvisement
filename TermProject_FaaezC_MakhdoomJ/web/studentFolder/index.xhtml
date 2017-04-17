@@ -7,9 +7,9 @@
     <h:head>
         <title>Facelet Title</title>
         <script type="text/javascript">
-            $(document).ready(function(){
-                $('button').click(function(){
-                    if(this.id.toString().includes("fileButton")){
+            $(document).ready(function () {
+                $('button').click(function () {
+                    if (this.id.toString().includes("fileButton")) {
                         $('input[type=file]').trigger('click');
                     }
                 });
@@ -27,6 +27,11 @@
                 <b:navLink value="Logout" outcome="/logout"></b:navLink>
             </b:navbarLinks>
         </b:navBar>
+        <h:panelGroup layout="block" rendered="#{!StudentBean.isAuthorized()}">
+            <div style="background:rgba(0,0,0,0.1); width:100%; height:50px; margin-bottom:20px;">
+                <p style="color:red;padding:5px;">Please <h:link outcome="/studentFolder/authorize">authorize</h:link> your account. Without authorization, you will not be able to book an appointment. <b:icon name="info" /></p>
+            </div>
+        </h:panelGroup>
         <b:container>
             <b:modal id="amodal" title="Update Profile Picture" styleClass="modalPseudoClass">
                 <h:form enctype="multipart/form-data">
@@ -44,6 +49,13 @@
                 <b:column span="3">
                     <b:thumbnail>
                         <div style="position:relative;">
+                            <div style="position:absolute; top:5px; left: 10px; " >
+                                <h:form>
+                                <h:commandLink style="color:rgba(0,0,0,0.3)" action="#{imageFileBean.delete()}">
+                                    <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="remove" />
+                                </h:commandLink>
+                                </h:form>
+                            </div>
                             <img style="width:250px; height:250px;" src="../ImageServlet" />
                             <div style="position:absolute; bottom:5px; right: 10px; " >
                                 <a style="color:rgba(0,0,0,0.3)" id="atrigger" href="#amodal" data-toggle="modal">
@@ -111,7 +123,6 @@
                                     <h:outputText value="#{appointment.notes}" />
                                 </b:dataTableColumn>
                             </b:dataTable>
-
                         </h:form>
                     </b:panel>
 
