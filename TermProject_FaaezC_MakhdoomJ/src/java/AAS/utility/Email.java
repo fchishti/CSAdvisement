@@ -56,7 +56,7 @@ public class Email {
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("CS Advisement");
-            message.setText("This is your verification code : \n" + text);
+            message.setText(text);
 
             Transport.send(message);
 
@@ -75,7 +75,7 @@ public class Email {
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(student.getEmail()));
             message.setSubject("CS Advisement");
-            message.setText(code);
+            message.setText("Your verification code is : " + code);
 
             Transport.send(message);
 

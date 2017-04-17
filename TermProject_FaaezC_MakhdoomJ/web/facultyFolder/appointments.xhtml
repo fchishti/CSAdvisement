@@ -13,25 +13,25 @@
             <h:dataTable border="1" value="#{facultyAppointmentBean.list}" var="appointment">
                 <h:column>
                     <f:facet name="header">Faculty</f:facet>
-                    <h:outputText value="#{appointment.facultyFirstname} "/>
-                    <h:outputText value="#{appointment.facultyLastname}"/>
+                    <h:outputText value="#{appointment.user.firstname} "/>
+                    <h:outputText value="#{appointment.user.lastname}"/>
                 </h:column>
                 <h:column>
                     <f:facet name="header">Date</f:facet>
-                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
-                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
-                    <h:outputText value="#{appointment.dateTime.year}"/>
+                    <h:outputText value="#{appointment.appointment.dateTime.dayOfMonth} / "/>
+                    <h:outputText value="#{appointment.appointment.dateTime.monthOfYear} / "/>
+                    <h:outputText value="#{appointment.appointment.dateTime.year}"/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">Time</f:facet>
-                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
-                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                    <h:outputText value="#{appointment.appointment.dateTime.hourOfDay} : "/>
+                    <h:outputText value="#{appointment.appointment.dateTime.minuteOfHour}"/>
                 </h:column>
 
                 <h:column>
                     <f:facet name="header">Notes</f:facet>
-                    <h:outputText value="#{appointment.notes}" />
+                    <h:outputText value="#{appointment.appointment.notes}" />
                 </h:column>
 
                 <h:column>
