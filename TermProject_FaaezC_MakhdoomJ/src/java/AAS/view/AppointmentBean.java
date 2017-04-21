@@ -93,7 +93,7 @@ public class AppointmentBean implements Serializable {
 
     public String create(Appointment appointment) {
         try {
-            dataBase.create(appointment, user.getUser());
+            dataBase.create(user.getUser(), appointment);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -125,7 +125,4 @@ public class AppointmentBean implements Serializable {
     public void setFacultyList(List<User> facultyList) {
         this.facultyList = facultyList;
     }
-    
-    
-
 }

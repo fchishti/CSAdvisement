@@ -5,6 +5,7 @@
  */
 package AAS.view;
 
+import AAS.controller.AppointmentDB;
 import AAS.controller.FacultyAppointmentDB;
 import AAS.model.Appointment;
 import AAS.model.StudentAppointment;
@@ -25,21 +26,25 @@ import javax.sql.DataSource;
  */
 @Named(value = "facultyAppointmentBean")
 @SessionScoped
-public class FacultyAppointmentBean implements Serializable{
-    
-    @Resource(name="jdbc/ds_wsp")
+public class FacultyAppointmentBean implements Serializable {
+
+    @Resource(name = "jdbc/ds_wsp")
     private DataSource ds;
-    
-    private List<StudentAppointment> list;
+
+    private List<StudentAppointment> bookedAppointmentList;
+    private List<Appointment> appointmentList;
     private Appointment appointment;
-    private FacultyAppointmentDB dataBase;
+    private FacultyAppointmentDB bookedAppointmentDB;
+    private AppointmentDB appointmentDB;
     private CurrentUser user;
-    
+
     @PostConstruct
-    public void init(){
-        dataBase = new FacultyAppointmentDB(ds);
+    public void init() {
+        bookedAppointmentDB = new FacultyAppointmentDB(ds);
+        appointmentDB = new AppointmentDB(ds);
         user = new CurrentUser(ds);
-        read();
+        readBookedAppointments();
+        readAppointments();
     }
 
     public Appointment getAppointment() {
@@ -50,18 +55,34 @@ public class FacultyAppointmentBean implements Serializable{
         this.appointment = appointment;
     }
 
-    public List<StudentAppointment> getList() {
-        return list;
+    public List<StudentAppointment> getBookedAppointmentList() {
+        return bookedAppointmentList;
     }
 
-    public void setList(List<StudentAppointment> list) {
-        this.list = list;
+    public void setBookedAppointmentList(List<StudentAppointment> list) {
+        this.bookedAppointmentList = list;
+    }
+
+    public List<Appointment> getAppointmentList() {
+        return appointmentList;
+    }
+
+    public void setAppointmentList(List<Appointment> appointmentList) {
+        this.appointmentList = appointmentList;
+    }
+
+    public String readBookedAppointments() {
+        try {
+            bookedAppointmentList = bookedAppointmentDB.read(user.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
-    
-    public String read() {
+    public String readAppointments() {
         try {
-            list = dataBase.read(user.getUser());
+            appointmentList = appointmentDB.read(user.getUser());
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
         }
