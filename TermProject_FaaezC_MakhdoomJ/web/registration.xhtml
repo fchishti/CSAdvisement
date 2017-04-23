@@ -2,43 +2,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Registration</title>
     </h:head>
     <h:body>
+        <b:container>
             <h1>Register</h1>
-            <h:form>
+            <b:form>
                 <h:panelGrid>
                     <h:outputLabel for="firstname" value="firstname" />
-                    <h:inputText id="firstname" value="#{userBean.user.firstname}"/>
+                    <b:inputText id="firstname" value="#{userBean.user.firstname}"/>
                     <h:message for="firstname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="lastname" value="lastname" />
-                    <h:inputText id="lastname" value="#{userBean.user.lastname}"/>
+                    <b:inputText id="lastname" value="#{userBean.user.lastname}"/>
                     <h:message for="lastname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="email" value="email" />
-                    <h:inputText id="email" value="#{userBean.user.email}"/>
+                    <b:inputText id="email" value="#{userBean.user.email}"/>
                     <h:message for="email" errorStyle="color:red"/>
                     
                     <h:outputLabel for="password" value="password" />
-                    <h:inputSecret id="password" value="#{userBean.user.password}" validatorMessage="Minimum 3 Characters and alphabets only">
-                        <f:validateRegex pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$"/>
-                    </h:inputSecret>
+                    <b:inputSecret id="password" value="#{userBean.user.password}"/>
                     <h:message for="password" errorStyle="color:red"/>
                     
                     <h:outputLabel for="studentid" value="student ID." />
-                    <h:inputText id="studentid" value="#{userBean.user.studentId}"/>
+                    <b:inputText id="studentid" value="#{userBean.user.studentId}"/>
                     <h:message for="studentid" errorStyle="color:red"/>
                     
                     <h:outputLabel for="majorcode" value="major code" />
-                    <h:inputText id="majorcode" value="#{userBean.user.majorCode}"/>
+                    <b:inputText id="majorcode" value="#{userBean.user.majorCode}"/>
                     <h:message for="majorcode" errorStyle="color:red"/>
 
-                    <h:commandButton value="Signup" action="#{userBean.create()}"/>
+                    <b:commandButton value="Signup" action="#{userBean.create()}"/>
                 </h:panelGrid>
-            </h:form>
+            </b:form>
+        </b:container>
     </h:body>
 </html>
 
