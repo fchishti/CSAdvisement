@@ -21,10 +21,84 @@
         </script>
     </h:head>
     <h:body>
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/facultyFolder/index" ></b:navLink>
+                <b:navLink value="Appointments" outcome="/facultyFolder/appointments"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
         <b:container>
             <h1>Appointments</h1>
-            
-            <h:form>
+            <b:row>
+                <b:column span="4">
+                    <b:row>
+                        <h:form>
+                            <h:panelGrid>
+                                <b:row>
+                                    <b:column offset-md="2" col-md="8">
+                                        <p style="text-align: center;font-weight: bold;">Date</p>
+                                        <b:datepicker value=""></b:datepicker>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">From</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">To</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">Interval</p>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1" />
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
+                                </b:row>
+                                <b:commandButton value="Generate" action="#{FacultyBean.update()}"/>
+                                <hr/>
+                            </h:panelGrid>
+                        </h:form>
+                        <h:form>
+                            <h:panelGrid>
+                                <b:row>
+                                    <b:column offset-md="2" col-md="8">
+                                        <p style="text-align: center;font-weight: bold;">Date</p>
+                                        <b:datepicker value="#{appointmentBean.appointmentAdder.date}"></b:datepicker>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">HH</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">MM</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">AM/PM</p>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentAdder.hours}" min="1" max="12" step="1" />
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentAdder.minutes}" min="1" max="59" step="1"/>
+                                    <b:selectOneMenu col-md="4" value="#{appointmentBean.appointmentAdder.amPm}" id="brandID" >
+                                        <f:selectItem itemLabel="AM" itemValue="am"/>
+                                        <f:selectItem itemLabel="PM" itemValue="pm"/>
+                                    </b:selectOneMenu>
+                                </b:row>
+                                <b:commandButton value="Add" action="#{appointmentBean.createAppointment()}"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </b:row>
+                </b:column>
+                <b:column span="8">
+                    <b:fullCalendar id="calendar"></b:fullCalendar>
+                    
+                    <h:form>
                 <h:dataTable border="1" value="#{facultyAppointmentBean.appointmentList }" var="appointment">
                     <h:column>
                         <f:facet name="header">Date</f:facet>
@@ -50,7 +124,9 @@
                     </h:column>
                 </h:dataTable>
             </h:form>
-            <b:fullCalendar id="calendar"></b:fullCalendar>
+                    
+                </b:column>
+            </b:row>
         </b:container>
     </h:body>
 </html>

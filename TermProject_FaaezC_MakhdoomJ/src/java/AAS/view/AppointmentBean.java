@@ -10,6 +10,7 @@ import AAS.controller.UserDB;
 import AAS.model.Appointment;
 import AAS.model.FacultyUser;
 import AAS.model.User;
+import AAS.utility.AppointmentAdder;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -39,6 +40,7 @@ public class AppointmentBean implements Serializable {
     private List<User> facultyList;
     private CurrentUser user;
     private User facultyUser;
+    private AppointmentAdder appointmentAdder;
 
     @PostConstruct
     public void init() {
@@ -46,6 +48,7 @@ public class AppointmentBean implements Serializable {
         userDB = new UserDB(ds);
         user = new CurrentUser(ds);
         facultyUser = new FacultyUser();
+        appointmentAdder = new AppointmentAdder();
         readFaculty();
     }
 
@@ -124,5 +127,21 @@ public class AppointmentBean implements Serializable {
 
     public void setFacultyList(List<User> facultyList) {
         this.facultyList = facultyList;
+    }
+
+    public AppointmentAdder getAppointmentAdder() {
+        return appointmentAdder;
+    }
+
+    public void setAppointmentAdder(AppointmentAdder appointmentAdder) {
+        this.appointmentAdder = appointmentAdder;
+    }
+    
+    public String createAppointment(){
+        Logger logger = Logger.getLogger(getClass().getName());
+        logger.severe("severe");
+        logger.info(appointmentAdder.toString());
+        logger.fine("fine");
+        return null;
     }
 }
