@@ -256,7 +256,7 @@ public class UserDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "select USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
+                    "select USERTABLE.ID, USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
                     + "on USERTABLE.ID = GROUPTABLE.ID where GROUPTABLE.GROUPNAME = 'studentgroup'"
             );
 
@@ -287,7 +287,7 @@ public class UserDB {
      * @exception SQLException
      * @return User
      */
-    public User readUser(String username, String role) throws SQLException {
+    public User readUserFromUsername(String username, String role) throws SQLException {
 
         StudentUser su = new StudentUser();
         FacultyUser fu = new FacultyUser();
@@ -344,6 +344,69 @@ public class UserDB {
             conn.close();
         }
 
+        if (role.equals("student")) {
+            return su;
+        } else {
+            return fu;
+        }
+    }
+    
+    public User readUserFromId(int userId, String role) throws SQLException{
+        StudentUser su = new StudentUser();
+        FacultyUser fu = new FacultyUser();
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps;
+            if (role.equals("faculty")) {
+                ps = conn.prepareStatement(
+                        "select ID, FIRSTNAME, LASTNAME, EMAIL from USERTABLE where ID = (?)"
+                );
+            } else if (role.equals("student")) {
+                ps = conn.prepareStatement(
+                        "select a.ID, a.FIRSTNAME, a.LASTNAME, a.EMAIL, b.STUDENT_ID, b.MAJOR_CODE "
+                        + " from USERTABLE a join STUDENTTABLE b on a.ID = b.USER_ID where a.ID = ?"
+                );
+            } else {
+                ps = conn.prepareStatement(
+                        "select ID, FIRSTNAME, LASTNAME, EMAIL from USERTABLE where ID = (?)"
+                );
+            }
+
+            ps.setInt(1, userId);
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+                if (role.equals("student")) {
+                    su.setUserId(result.getInt("ID"));
+                    su.setFirstname(result.getString("FIRSTNAME"));
+                    su.setLastname(result.getString("LASTNAME"));
+                    su.setEmail(result.getString("EMAIL"));
+                    su.setMajorCode(result.getInt("MAJOR_CODE"));
+                    su.setStudentId(result.getInt("STUDENT_ID"));
+                } else {
+                    fu = new FacultyUser();
+                    fu.setUserId(result.getInt("ID"));
+                    fu.setFirstname(result.getString("FIRSTNAME"));
+                    fu.setLastname(result.getString("LASTNAME"));
+                    fu.setEmail(result.getString("EMAIL"));
+                }
+            }
+
+        } finally {
+            conn.close();
+        }
+        
         if (role.equals("student")) {
             return su;
         } else {

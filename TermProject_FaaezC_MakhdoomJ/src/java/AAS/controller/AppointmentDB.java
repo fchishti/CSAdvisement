@@ -31,7 +31,7 @@ public class AppointmentDB {
         this.db = db;
     }
 
-    public void create(Appointment appointment, User user) throws SQLException {
+    public void create(User user, Appointment appointment) throws SQLException {
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -45,19 +45,27 @@ public class AppointmentDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into APPOINTMENTTABLE(USER_ID, DATE, TIME, NOTES)"
-                    + "values((select ID from USERTABLE where ID = ?),?,?,?)"
+                    "insert into APPOINTMENTTABLE (DATE, TIME, NOTES, USER_ID, FACULTYFIRSTNAME, FACULTYLASTNAME)"
+                    + "values (?,?,?,(select ID from USERTBALE where ID = (?)),?,?)"
             );
 
-            ps.setInt(1, user.getUserId());
+            String dateStr = appointment.getDateTime().year().getAsString()
+                    + appointment.getDateTime().monthOfYear().getAsString()
+                    + appointment.getDateTime().dayOfMonth().getAsString();
 
-            ps.setString(2, appointment.dateTime.getYear() + "-"
-                    + appointment.dateTime.getMonthOfYear() + "-"
-                    + appointment.dateTime.getSecondOfDay());
+            String timeStr = appointment.getDateTime().hourOfDay().getAsString()
+                    + appointment.getDateTime().minuteOfHour().getAsString()
+                    + appointment.getDateTime().secondOfMinute().getAsString();
 
-            ps.setString(3, appointment.dateTime.getHourOfDay() + "-"
-                    + appointment.dateTime.getMinuteOfDay() + "-"
-                    + appointment.dateTime.getSecondOfDay());
+            Date date = Date.valueOf(dateStr);
+            Time time = Time.valueOf(timeStr);
+
+            ps.setDate(1, date);
+            ps.setTime(2, time);
+            ps.setString(3, appointment.getNotes());
+            ps.setInt(4, user.getUserId());
+            ps.setString(5, user.getFirstname());
+            ps.setString(6, user.getLastname());
 
             int result = ps.executeUpdate();
 
@@ -92,20 +100,20 @@ public class AppointmentDB {
             );
 
             ps.setInt(1, user.getUserId());
-            
+
             ResultSet result = ps.executeQuery();
 
             while (result.next()) {
 
                 Appointment a = new Appointment();
                 a.setAppointmentId(result.getInt("ID"));
-                a.setFacultyId(result.getInt("ID"));
+                a.setFacultyId(result.getInt("USER_ID"));
                 a.setFacultyFirstname(result.getString("FACULTYFIRSTNAME"));
                 a.setFacultyLastname(result.getString("FACULTYLASTNAME"));
 
                 Date date = result.getDate("DATE");
                 Time time = result.getTime("TIME");
-                DateTime dateTime = new DateTime(date.toString() +"T" + time.toString());
+                DateTime dateTime = new DateTime(date.toString() + "T" + time.toString());
 
                 a.setDateTime(dateTime);
                 a.setNotes(result.getString("NOTES"));

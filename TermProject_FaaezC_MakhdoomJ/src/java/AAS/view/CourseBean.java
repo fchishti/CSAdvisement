@@ -23,26 +23,62 @@ import javax.sql.DataSource;
  */
 @Named(value = "courseBean")
 @SessionScoped
-public class CourseBean implements Serializable{
-    @Resource(name="jdbc/ds_wsp")
+public class CourseBean implements Serializable {
+
+    @Resource(name = "jdbc/ds_wsp")
     private DataSource ds;
-    
+
     private CourseDB dataBase;
     private List<Course> list;
-    
+    private Course course;
+
     @PostConstruct
-    public void init(){
+    public void init() {
         dataBase = new CourseDB(ds);
+        course = new Course();
         read();
     }
-    
-    public String read(){
-        try{
+
+    public String read() {
+        try {
             list = dataBase.read();
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public String create() {
+        try {
+            dataBase.create(course);
+            read();
+            return "adminFolder/manageCourses";
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+        
+    }
+
+    public String delete(Course course) {
+        try {
+            dataBase.delete(course);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        read();
+        return null;
+    }
+    
+    public String update() {
+        try {
+            dataBase.update(course);
+            read();
+            return "/adminFolder/manageCourses";
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
     public List<Course> getList() {
@@ -52,6 +88,18 @@ public class CourseBean implements Serializable{
     public void setList(List<Course> list) {
         this.list = list;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
     
-    
+    public String editCourse(Course course){
+        this.course = course;
+        return "/adminFolder/editCourse";
+    }
+
 }
