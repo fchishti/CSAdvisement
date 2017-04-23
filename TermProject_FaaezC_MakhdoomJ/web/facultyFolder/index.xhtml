@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('button').click(function () {
+                    if (this.id.toString().includes("fileButton")) {
+                        $('input[type=file]').trigger('click');
+                    }
+                });
+            });
+        </script>
+    </h:head>
+    <h:body>
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/facultyFolder/index" ></b:navLink>
+                <b:navLink value="Appointments" outcome="/facultyFolder/appointments"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+            <b:modal id="amodal" title="Update Profile Picture" styleClass="modalPseudoClass">
+                <h:form enctype="multipart/form-data">
+                    <b:button size="lg"  id="fileButton"  icon="plus" value="Choose" look="primary"/>
+                    <h:inputFile style="visibility:hidden;" id="file" label="file" value="#{imageFileBean.part}" validator="#{imageFileBean.validateFile}" />
+                    <b:message for="file" errorStyle="color: red" infoStyle="color: blue"/>
+                    <b:commandButton icon="upload" id="upload" action="#{imageFileBean.upload()}" value="Upload" />
+                    <b:message for="upload" errorStyle="color: red" infoStyle="color: blue" />
+                </h:form>
+                <f:facet name="footer">
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                </f:facet>
+            </b:modal>
+            <b:row>
+                <b:column span="3">
+                    <b:thumbnail>
+                        <div style="position:relative;">
+                            <div style="position:absolute; top:5px; left: 10px; " >
+                                <h:form>
+                                    <h:commandLink style="color:rgba(0,0,0,0.3)" action="#{imageFileBean.delete()}">
+                                        <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="remove" />
+                                    </h:commandLink>
+                                </h:form>
+                            </div>
+                            <img style="width:250px; height:250px;" src="../ImageServlet" />
+                            <div style="position:absolute; bottom:5px; right: 10px; " >
+                                <a style="color:rgba(0,0,0,0.3)" id="atrigger" href="#amodal" data-toggle="modal">
+                                    <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="camera" />
+                                </a>
+                            </div>
+                        </div>
+                    </b:thumbnail>
+                    <p><h:outputLabel value="#{FacultyBean.facultyUser.firstname} #{FacultyBean.facultyUser.lastname}"/></p>
+                    <p><b:icon name="envelope" /><h:outputLabel value="#{FacultyBean.facultyUser.email}"/></p>
+                    <b:button look="success" value="Edit Info" outcome="/facultyFolder/editInfo"/> 
+                </b:column>
+
+                <b:column span="9">
+                    <b:panel title="Scheduled Appointments" look="success">
+                        <h:form>
+                            <b:dataTable searching="false" paginated="false" value="#{facultyAppointmentBean.bookedAppointmentList}" var="appointment">
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Faculty</f:facet>
+                                    <h:commandLink action="#{FacultyBean.readStudent(appointment.user.userId)}">
+                                        <h:outputText value="#{appointment.user.firstname} "/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{FacultyBean.readStudent(appointment.user.userId)}">
+                                        <h:outputText value="#{appointment.user.lastname}"/>
+                                    </h:commandLink>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.year}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.appointment.dateTime.minuteOfHour}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.appointment.notes}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+
+                        </h:form>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:body>
+</html>
+

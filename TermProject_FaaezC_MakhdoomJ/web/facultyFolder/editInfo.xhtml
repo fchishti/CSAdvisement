@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+            <h1>Register</h1>
+            <h:form>
+                <h:panelGrid>
+                    <h:outputLabel for="firstname" value="firstname" />
+                    <h:inputText id="firstname" value="#{FacultyBean.facultyUser.firstname}"/>
+                    <h:message for="firstname" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="lastname" value="lastname" />
+                    <h:inputText id="lastname" value="#{FacultyBean.facultyUser.lastname}"/>
+                    <h:message for="lastname" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="email" value="email" />
+                    <h:inputText id="email" value="#{FacultyBean.facultyUser.email}"/>
+                    <h:message for="email" errorStyle="color:red"/>
+
+                    <h:commandButton value="Save" action="#{FacultyBean.update()}"/> <br/>
+                    <h:button value="Back" outcome="/facultyFolder/index"/>
+                    
+                    
+                </h:panelGrid>
+            </h:form>
+    </h:body>
+</html>
+

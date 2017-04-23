@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <script type="text/javascript">
+    
+            $(document).ready(function () {
+                $('#calendar').fullCalendar({
+                    events: [
+                        <ui:repeat value="#{facultyAppointmentBean.appointmentList}" var="appointment" varStatus="loop">
+                            { start: "#{appointment.dateTime}" },
+                        </ui:repeat>
+                    ]
+                });
+            });
+        </script>
+    </h:head>
+    <h:body>
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/facultyFolder/index" ></b:navLink>
+                <b:navLink value="Appointments" outcome="/facultyFolder/appointments"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+            <h1>Appointments</h1>
+            <b:row>
+                <b:column span="4">
+                    <b:row>
+                        <h:form>
+                            <h:panelGrid>
+                                <b:row>
+                                    <b:column offset-md="2" col-md="8">
+                                        <p style="text-align: center;font-weight: bold;">Date</p>
+                                        <b:datepicker value=""></b:datepicker>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">From</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">To</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">Interval</p>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1" />
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
+                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
+                                </b:row>
+                                <b:commandButton value="Generate" action="#{FacultyBean.update()}"/>
+                                <hr/>
+                            </h:panelGrid>
+                        </h:form>
+                        <h:form>
+                            <h:panelGrid>
+                                <b:row>
+                                    <b:column offset-md="2" col-md="8">
+                                        <p style="text-align: center;font-weight: bold;">Date</p>
+                                        <b:datepicker value="#{appointmentBean.appointmentAdder.date}"></b:datepicker>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">HH</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">MM</p>
+                                    </b:column>
+                                    <b:column col-md="4">
+                                        <p style="text-align: center;font-weight: bold;">AM/PM</p>
+                                    </b:column>
+                                </b:row>
+                                <b:row>
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentAdder.hours}" min="1" max="12" step="1" />
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentAdder.minutes}" min="1" max="59" step="1"/>
+                                    <b:selectOneMenu col-md="4" value="#{appointmentBean.appointmentAdder.amPm}" id="brandID" >
+                                        <f:selectItem itemLabel="AM" itemValue="am"/>
+                                        <f:selectItem itemLabel="PM" itemValue="pm"/>
+                                    </b:selectOneMenu>
+                                </b:row>
+                                <b:commandButton value="Add" action="#{appointmentBean.createAppointment()}"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </b:row>
+                </b:column>
+                <b:column span="8">
+                    <b:fullCalendar id="calendar"></b:fullCalendar>
+                    
+                    <h:form>
+                <h:dataTable border="1" value="#{facultyAppointmentBean.appointmentList }" var="appointment">
+                    <h:column>
+                        <f:facet name="header">Date</f:facet>
+                        <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                        <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                        <h:outputText value="#{appointment.dateTime.year}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Time</f:facet>
+                        <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                        <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Notes</f:facet>
+                        <h:outputText value="#{appointment.notes}" />
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:commandButton value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+                    
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:body>
+</html>
+

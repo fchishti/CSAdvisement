@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/studentFolder/index" ></b:navLink>
+                <b:navLink value="Courses" outcome="/studentFolder/editCourses"></b:navLink>
+                <b:navLink value="Appointments" outcome="/studentFolder/appointment"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+            <b:row>
+                <b:column span="3">
+                    <b:thumbnail>
+                        <img style="width:250px; height:250px;" src="../ImageServlet?id=#{StudentBean.facultyUser.userId}" />
+                    </b:thumbnail>
+                    <p><h:outputLabel value="#{StudentBean.facultyUser.firstname} #{StudentBean.facultyUser.lastname}"/></p>
+                    <p><h:outputLabel value="#{StudentBean.facultyUser.email}"/></p>
+                </b:column>
+                
+                <b:column span="9">
+                    <b:row>
+                    </b:row>
+                    <b:panel title="Scheduled Appointments With #{StudentBean.facultyUser.firstname} #{StudentBean.facultyUser.lastname}" look="success">
+                        <h:form>
+                            <b:dataTable searching="false" paginated="false" value="#{StudentBean.appointments}" var="appointment">
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.dateTime.year}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.notes}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+
+                        </h:form>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:body>
+</html>
+
