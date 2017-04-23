@@ -23,7 +23,9 @@
                     <h:message for="email" errorStyle="color:red"/>
                     
                     <h:outputLabel for="password" value="password" />
-                    <h:inputSecret id="password" value="#{userBean.user.password}"/>
+                    <h:inputSecret id="password" value="#{userBean.user.password}" validatorMessage="Minimum 3 Characters and alphabets only">
+                        <f:validateRegex pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{8,}$"/>
+                    </h:inputSecret>
                     <h:message for="password" errorStyle="color:red"/>
                     
                     <h:outputLabel for="studentid" value="student ID." />

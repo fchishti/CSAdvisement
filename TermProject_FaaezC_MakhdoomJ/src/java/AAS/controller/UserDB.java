@@ -85,6 +85,51 @@ public class UserDB {
             conn.close();
         }
     }
+    
+    public void createFaculty(User user) throws SQLException {
+
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "insert into USERTABLE(firstname, lastname, password, email)"
+                    + "values(?,?,?,?)"
+            );
+
+            PreparedStatement ps2 = conn.prepareStatement(
+                    "insert into GROUPTABLE (groupname, user_id, username) "
+                    + "values ('facultygroup', (select ID from USERTABLE where EMAIL = (?)),?)"
+            );
+
+            ps.setString(1, user.getFirstname());
+            ps.setString(2, user.getLastname());
+            Sha256 password = new Sha256(user.getPassword());
+            ps.setString(3, password.getCipher());
+            ps.setString(4, user.getEmail());
+
+            ps2.setString(1, user.getEmail());
+            ps2.setString(2, user.getEmail());
+
+            int result = ps.executeUpdate();
+
+            int result2 = ps2.executeUpdate();
+
+            if (result != 1 && result2 != 1 && result != 1) {
+                throw new SQLException();
+            }
+
+        } finally {
+            conn.close();
+        }
+    }
 
     public List<User> read() throws SQLException {
 
@@ -173,7 +218,7 @@ public class UserDB {
         } finally {
             conn.close();
         }
-    }
+    } 
 
     public void delete(User user) throws SQLException {
         if (db == null) {

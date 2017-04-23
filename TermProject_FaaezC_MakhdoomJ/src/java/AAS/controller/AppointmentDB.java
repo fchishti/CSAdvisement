@@ -46,16 +46,16 @@ public class AppointmentDB {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "insert into APPOINTMENTTABLE (DATE, TIME, NOTES, USER_ID, FACULTYFIRSTNAME, FACULTYLASTNAME)"
-                    + "values (?,?,?,(select ID from USERTBALE where ID = (?)),?,?)"
+                    + "values (?,?,?,(select ID from USERTABLE where ID = (?)),(select FIRSTNAME from USERTABLE where ID = (?)),(select LASTNAME from USERTABLE where ID = (?)))"
             );
 
             String dateStr = appointment.getDateTime().year().getAsString()
-                    + appointment.getDateTime().monthOfYear().getAsString()
-                    + appointment.getDateTime().dayOfMonth().getAsString();
+                    + "-" + appointment.getDateTime().monthOfYear().getAsString()
+                    + "-" +appointment.getDateTime().dayOfMonth().getAsString();
 
             String timeStr = appointment.getDateTime().hourOfDay().getAsString()
-                    + appointment.getDateTime().minuteOfHour().getAsString()
-                    + appointment.getDateTime().secondOfMinute().getAsString();
+                    + ":" +appointment.getDateTime().minuteOfHour().getAsString()
+                    + ":"  +appointment.getDateTime().secondOfMinute().getAsString();
 
             Date date = Date.valueOf(dateStr);
             Time time = Time.valueOf(timeStr);
@@ -64,8 +64,8 @@ public class AppointmentDB {
             ps.setTime(2, time);
             ps.setString(3, appointment.getNotes());
             ps.setInt(4, user.getUserId());
-            ps.setString(5, user.getFirstname());
-            ps.setString(6, user.getLastname());
+            ps.setInt(5, user.getUserId());
+            ps.setInt(6, user.getUserId());
 
             int result = ps.executeUpdate();
 

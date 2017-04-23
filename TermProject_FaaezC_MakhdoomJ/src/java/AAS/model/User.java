@@ -5,16 +5,26 @@
  */
 package AAS.model;
 
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author faaez
  */
 public abstract class User {
 
+    @NotNull(message="Please enter something")
     public String firstname;
+    
+    @NotNull(message="Please enter something")
     public String lastname;
+    
+    @NotNull(message="Please enter something")
     public String email;
+    
+    @NotNull(message="Please enter something")
     public String password;
+    
     public int userId;
     public String group;
 

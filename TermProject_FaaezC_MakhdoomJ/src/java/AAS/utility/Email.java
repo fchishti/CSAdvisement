@@ -34,24 +34,25 @@ public class Email {
 
     public Email(DataSource db) {
         this.db = db;
-        
+
         props = new Properties();
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", "587");
 
-        session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        });
     }
 
     public void send(String text, String to) {
         try {
+            session = Session.getDefaultInstance(props,
+                    new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            });
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -66,11 +67,19 @@ public class Email {
             e.printStackTrace();
         }
     }
-    
-    public void sendAuthCode(User student){
+
+    public void sendAuthCode(User student) {
         Random rand = new Random();
-        String code = ""+(rand.nextInt(9999999) + 1000000);
+        String code = "" + (rand.nextInt(9999999) + 1000000);
         try {
+            session = Session.getDefaultInstance(props,
+                    new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            });
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(student.getEmail()));
@@ -84,7 +93,7 @@ public class Email {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        
+
         AuthDB dataBase = new AuthDB(db);
         try {
             dataBase.create(student, Integer.parseInt(code));
@@ -92,5 +101,5 @@ public class Email {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

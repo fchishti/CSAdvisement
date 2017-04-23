@@ -19,27 +19,59 @@
             </b:navbarLinks>
         </b:navBar>
         <b:container>
+
             <b:row>
-                <h2>Add a new course</h2>
-                <hr/>
+                <b:column span="5">
+                    <b:row>
+                        <h2>Add new course</h2>
+                        <hr/>
+                    </b:row>
+                    <b:form>
+                        <h:panelGrid>
+                            <h:outputLabel for="Title" value="Title" />
+                            <b:inputText  value="#{courseBean.course.title}"/>
+                            <h:message for="title" errorStyle="color:red"/>
+
+                            <h:outputLabel for="prefix" value="Prefix" />
+                            <b:inputText  value="#{courseBean.course.prefix}"/>
+                            <h:message for="prefix" errorStyle="color:red"/>
+
+                            <h:outputLabel for="code" value="Code" />
+                            <b:inputText  value="#{courseBean.course.code}"/>
+                            <h:message for="code" errorStyle="color:red"/>
+
+                            <b:commandButton value="Create" action="#{courseBean.create()}"/>
+                        </h:panelGrid>
+                    </b:form>
+                </b:column>
+                <b:column offset="1" span="5">
+                    <b:row>
+                        <h2>Add new faculty</h2>
+                        <hr/>
+                    </b:row>
+                    <b:form>
+                        <h:panelGrid>
+                            <h:outputLabel for="firstname" value="firstname" />
+                            <b:inputText id="firstname" value="#{userBean.user.firstname}"/>
+                            <h:message for="firstname" errorStyle="color:red"/>
+
+                            <h:outputLabel for="lastname" value="lastname" />
+                            <b:inputText id="lastname" value="#{userBean.user.lastname}"/>
+                            <h:message for="lastname" errorStyle="color:red"/>
+
+                            <h:outputLabel for="email" value="email" />
+                            <b:inputText id="email" value="#{userBean.user.email}"/>
+                            <h:message for="email" errorStyle="color:red"/>
+
+                            <h:outputLabel for="password" value="password" />
+                            <b:inputSecret id="password" value="#{userBean.user.password}"/>
+                            <h:message for="password" errorStyle="color:red"/>
+
+                            <b:commandButton value="Signup" action="#{userBean.createFaculty()}"/>
+                        </h:panelGrid>
+                    </b:form>
+                </b:column>
             </b:row>
-            <b:form>
-                <h:panelGrid>
-                    <h:outputLabel for="Title" value="Title" />
-                    <b:inputText  value="#{courseBean.course.title}"/>
-                    <h:message for="title" errorStyle="color:red"/>
-
-                    <h:outputLabel for="prefix" value="Prefix" />
-                    <b:inputText  value="#{courseBean.course.prefix}"/>
-                    <h:message for="prefix" errorStyle="color:red"/>
-
-                    <h:outputLabel for="code" value="Code" />
-                    <b:inputText  value="#{courseBean.course.code}"/>
-                    <h:message for="code" errorStyle="color:red"/>
-
-                    <b:commandButton value="Create" action="#{courseBean.create()}"/>
-                </h:panelGrid>
-            </b:form>
         </b:container>
     </h:body>
 </html>
