@@ -60,6 +60,10 @@ public class AppointmentBean implements Serializable {
     public String readFaculty() {
         try {
             this.facultyList = userDB.readFaculty();
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.severe("severe");
+            logger.info(facultyList.toString());
+            logger.fine("fine");
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -144,7 +148,7 @@ public class AppointmentBean implements Serializable {
     public String createAppointment(){
         Appointment appt = new Appointment();
         appt.setDateTime(this.appointmentAdder.getDateTime());
-        appt.setNotes("Be on time in room MCS 116");
+        appt.setNotes(this.appointmentAdder.getNotes());
         this.create(appt);
         readAppointments();
         return "/facultyFolder/appointments";

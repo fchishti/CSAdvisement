@@ -18,6 +18,7 @@ public class AppointmentAdder {
     private String hours;
     private String minutes;
     private String amPm;
+    private String notes;
 
     private static HashMap<String, Integer> months;
     private static HashMap<String, String> zones;
@@ -79,6 +80,16 @@ public class AppointmentAdder {
     public void setAmPm(String amPm) {
         this.amPm = amPm;
     }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    
+    
 
     public DateTime getDateTime() {
         

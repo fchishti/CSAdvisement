@@ -19,52 +19,63 @@
             </b:navbarLinks>
         </b:navBar>
         <b:container>
-            <h1>Register</h1>
-            <h:form>
-                <b:dataTable border="1" value="#{studentCourseBean.list}" var="course">
-                    <h:column>
-                        <f:facet name="header">Code</f:facet>
-                        <h:outputText value="#{course.code}"/>
-                    </h:column>
+            <h1>Course Editor</h1>
+            <b:row>
+                <b:column span="6">
+                    <b:well>
+                        <h3>Your Courses</h3>
+                    <h:form>
+                        <b:dataTable searching="false" border="1" value="#{studentCourseBean.list}" var="course">
+                            <h:column>
+                                <f:facet name="header">Code</f:facet>
+                                <h:outputText value="#{course.code}"/>
+                            </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Title</f:facet>
-                        <h:outputText value="#{course.title}" />
-                    </h:column>
+                            <h:column>
+                                <f:facet name="header">Title</f:facet>
+                                <h:outputText value="#{course.title}" />
+                            </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Prefix</f:facet>
-                        <h:outputText value="#{course.prefix}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Delete</f:facet>
-                        <b:commandButton look="danger" value="Delete" action="#{studentCourseBean.delete(course)}"/>
-                    </h:column>
-                </b:dataTable>
-            </h:form>
-            <div style="width:100%;height:50px;"></div>
-            <h:form>
-                <b:dataTable border="1" value="#{courseBean.list}" var="course">
-                    <h:column>
-                        <f:facet name="header">Code</f:facet>
-                        <h:outputText value="#{course.code}"/>
-                    </h:column>
+                            <h:column>
+                                <f:facet name="header">Prefix</f:facet>
+                                <h:outputText value="#{course.prefix}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Delete</f:facet>
+                                <b:commandButton look="danger" value="Delete" action="#{studentCourseBean.delete(course)}"/>
+                            </h:column>
+                        </b:dataTable>
+                    </h:form>
+                    </b:well>
+                </b:column>
+                <b:column span="6">
+                    <b:well>
+                        <h3>Available Courses</h3>
+                    <h:form>
+                        <b:dataTable searching="false" border="1" value="#{courseBean.list}" var="course">
+                            <h:column>
+                                <f:facet name="header">Code</f:facet>
+                                <h:outputText value="#{course.code}"/>
+                            </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Title</f:facet>
-                        <h:outputText value="#{course.title}" />
-                    </h:column>
+                            <h:column>
+                                <f:facet name="header">Title</f:facet>
+                                <h:outputText value="#{course.title}" />
+                            </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Prefix</f:facet>
-                        <h:outputText value="#{course.prefix}" />
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Add</f:facet>
-                        <b:commandButton value="Add" action="#{studentCourseBean.insert(course)}"/>
-                    </h:column>
-                </b:dataTable>
-            </h:form>            
+                            <h:column>
+                                <f:facet name="header">Prefix</f:facet>
+                                <h:outputText value="#{course.prefix}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Add</f:facet>
+                                <b:commandButton look="success" value="Add" action="#{studentCourseBean.insert(course)}"/>
+                            </h:column>
+                        </b:dataTable>
+                    </h:form>
+                    </b:well>
+                </b:column>
+            </b:row>
         </b:container>
     </h:body>
 </html>

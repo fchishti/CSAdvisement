@@ -13,16 +13,16 @@ import javax.validation.constraints.NotNull;
  */
 public abstract class User {
 
-    @NotNull(message="Please enter something")
+    @NotNull(message="Please enter first name")
     public String firstname;
     
-    @NotNull(message="Please enter something")
+    @NotNull(message="Please enter last name")
     public String lastname;
     
-    @NotNull(message="Please enter something")
+    @NotNull(message="Please enter email")
     public String email;
     
-    @NotNull(message="Please enter something")
+    @NotNull(message="Please enter a password")
     public String password;
     
     public int userId;

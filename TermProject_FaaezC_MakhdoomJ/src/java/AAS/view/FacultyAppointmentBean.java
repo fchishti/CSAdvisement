@@ -10,6 +10,7 @@ import AAS.controller.FacultyAppointmentDB;
 import AAS.model.Appointment;
 import AAS.model.StudentAppointment;
 import AAS.utility.CurrentUser;
+import AAS.utility.Email;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
@@ -83,6 +84,18 @@ public class FacultyAppointmentBean implements Serializable {
     public String readAppointments() {
         try {
             appointmentList = appointmentDB.read(user.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public String cancelAppointment(StudentAppointment studentAppointment){
+        try {
+            bookedAppointmentDB.delete(studentAppointment);
+            Email email = new Email(ds);
+            email.sendDeleteConfirm(studentAppointment);
+            
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(StudentAppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
         }

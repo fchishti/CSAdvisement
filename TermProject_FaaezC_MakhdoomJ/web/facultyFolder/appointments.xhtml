@@ -92,6 +92,8 @@
                                         <f:selectItem itemLabel="PM" itemValue="pm"/>
                                     </b:selectOneMenu>
                                 </b:row>
+                                <h:outputLabel value="Notes"/>
+                                <b:inputTextarea value="#{appointmentBean.appointmentAdder.notes}"></b:inputTextarea>
                                 <b:commandButton value="Add" action="#{appointmentBean.createAppointment()}"/>
                             </h:panelGrid>
                         </h:form>
@@ -99,9 +101,9 @@
                 </b:column>
                 <b:column span="8">
                     <b:fullCalendar id="calendar"></b:fullCalendar>
-                    
+                    <div style="width: 100%; height:100px;"></div>
                     <h:form>
-                        <b:dataTable border="1" value="#{appointmentBean.list }" var="appointment">
+                        <b:dataTable searching="false" border="1" value="#{appointmentBean.list }" var="appointment">
                     <h:column>
                         <f:facet name="header">Date</f:facet>
                         <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
@@ -126,7 +128,7 @@
                     </h:column>
                 </b:dataTable>
             </h:form>
-                    
+                    <div style="width: 100%; height:100px;"></div>s
                 </b:column>
             </b:row>
         </b:container>

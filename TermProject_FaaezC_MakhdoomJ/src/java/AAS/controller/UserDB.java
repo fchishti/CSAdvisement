@@ -263,7 +263,7 @@ public class UserDB {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "select USERTABLE.ID, USERTABLE.FIRSTNAME, USERTABLE.LASTNAME, USERTABLE.EMAIL, GROUPTABLE.GROUPNAME from USERTABLE join GROUPTABLE "
-                    + "on USERTABLE.ID = GROUPTABLE.ID where GROUPTABLE.GROUPNAME = 'facultygroup'"
+                    + "on USERTABLE.ID = GROUPTABLE.USER_ID where GROUPTABLE.GROUPNAME = 'facultygroup'"
             );
 
             ResultSet result = ps.executeQuery();

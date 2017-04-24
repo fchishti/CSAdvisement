@@ -28,17 +28,23 @@
                     </b:row>
                     <b:form>
                         <h:panelGrid>
-                            <h:outputLabel for="Title" value="Title" />
-                            <b:inputText  value="#{courseBean.course.title}"/>
-                            <h:message for="title" errorStyle="color:red"/>
+                            <h:outputLabel for="title" value="Title" />
+                            <b:inputText id="title" value="#{courseBean.course.title}" validatorMessage="Must be more than one alphabet">
+                                <f:validateLength minimum="2"/>
+                            </b:inputText>
+                            <b:message for="title" errorStyle="color:red"/>
 
                             <h:outputLabel for="prefix" value="Prefix" />
-                            <b:inputText  value="#{courseBean.course.prefix}"/>
-                            <h:message for="prefix" errorStyle="color:red"/>
+                            <b:inputText id="prefix"  value="#{courseBean.course.prefix}" validatorMessage="Must be more than one alphabet">
+                                <f:validateLength minimum="2"/>
+                            </b:inputText>
+                            <b:message for="prefix" errorStyle="color:red"/>
 
                             <h:outputLabel for="code" value="Code" />
-                            <b:inputText  value="#{courseBean.course.code}"/>
-                            <h:message for="code" errorStyle="color:red"/>
+                            <b:inputText id="code" value="#{courseBean.course.code}" validatorMessage="Must be more 4 or more">
+                                <f:validateLength minimum="4"/>
+                            </b:inputText>
+                            <b:message for="code" errorStyle="color:red"/>
 
                             <b:commandButton value="Create" action="#{courseBean.create()}"/>
                         </h:panelGrid>
@@ -52,20 +58,28 @@
                     <b:form>
                         <h:panelGrid>
                             <h:outputLabel for="firstname" value="firstname" />
-                            <b:inputText id="firstname" value="#{userBean.user.firstname}"/>
-                            <h:message for="firstname" errorStyle="color:red"/>
+                            <b:inputText id="firstname" value="#{userBean.user.firstname}" validatorMessage="Please enter first name">
+                                <f:validateLength minimum="1"/>
+                            </b:inputText>
+                            <b:message for="firstname" errorStyle="color:red"/>
 
                             <h:outputLabel for="lastname" value="lastname" />
-                            <b:inputText id="lastname" value="#{userBean.user.lastname}"/>
-                            <h:message for="lastname" errorStyle="color:red"/>
+                            <b:inputText id="lastname" value="#{userBean.user.lastname}" validatorMessage="Please enter last name">
+                                <f:validateLength minimum="1" />
+                            </b:inputText>
+                            <b:message for="lastname" errorStyle="color:red"/>
 
                             <h:outputLabel for="email" value="email" />
-                            <b:inputText id="email" value="#{userBean.user.email}"/>
-                            <h:message for="email" errorStyle="color:red"/>
+                            <b:inputText id="email" value="#{userBean.user.email}" validatorMessage="email should be xxx@uco.edu">
+                                <f:validateRegex pattern="^[a-zA-Z0-9_.+-]{2,64}+@[a-zA_Z0-9-]{3,3}\.(edu)"/>
+                            </b:inputText>
+                            <b:message for="email" errorStyle="color:red"/>
 
                             <h:outputLabel for="password" value="password" />
-                            <b:inputSecret id="password" value="#{userBean.user.password}"/>
-                            <h:message for="password" errorStyle="color:red"/>
+                            <b:inputSecret id="password" value="#{userBean.user.password}" validatorMessage="Minimum 8 characters at least 1 Uppercase Alphabet, 1 Lowercase Alphabet and 1 Number">
+                                <f:validateRegex pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"/>
+                            </b:inputSecret>
+                            <b:message for="password" errorStyle="color:red"/>
 
                             <b:commandButton value="Signup" action="#{userBean.createFaculty()}"/>
                         </h:panelGrid>
