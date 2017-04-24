@@ -39,7 +39,6 @@ public class UserBean implements Serializable {
     public void init() {
         dataBase = new UserDB(ds);
         user = new StudentUser();
-        email = new Email(ds);
         read();
     }
 
@@ -54,6 +53,7 @@ public class UserBean implements Serializable {
 
     public String create() {
         try {
+            email = new Email(ds);
             dataBase.create(user);
             email.sendAuthCode(user);
             return "/login";
@@ -76,6 +76,16 @@ public class UserBean implements Serializable {
     public String update(User user) {
         try {
             dataBase.delete(user);
+            return "/login";
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public String createFaculty(){
+        try {
+            dataBase.createFaculty(user);
             return "/login";
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);

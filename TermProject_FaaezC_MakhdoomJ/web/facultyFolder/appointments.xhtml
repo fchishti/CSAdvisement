@@ -12,7 +12,7 @@
             $(document).ready(function () {
                 $('#calendar').fullCalendar({
                     events: [
-                        <ui:repeat value="#{facultyAppointmentBean.appointmentList}" var="appointment" varStatus="loop">
+                   <ui:repeat value="#{appointmentBean.list}" var="appointment" varStatus="loop">
                             { start: "#{appointment.dateTime}" },
                         </ui:repeat>
                     ]
@@ -40,7 +40,7 @@
                                 <b:row>
                                     <b:column offset-md="2" col-md="8">
                                         <p style="text-align: center;font-weight: bold;">Date</p>
-                                        <b:datepicker value=""></b:datepicker>
+                                        <b:datepicker value="#{appointmentBean.appointmentGenerator.date}"></b:datepicker>
                                     </b:column>
                                 </b:row>
                                 <b:row>
@@ -55,11 +55,13 @@
                                     </b:column>
                                 </b:row>
                                 <b:row>
-                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1" />
-                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
-                                    <b:touchSpin col-md="4" value="" min="1" max="24" step="1"/>
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentGenerator.from}" min="1" max="24" step="1" />
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentGenerator.to}" min="1" max="24" step="1"/>
+                                    <b:touchSpin col-md="4" value="#{appointmentBean.appointmentGenerator.interval}" min="1" max="24" step="1"/>
                                 </b:row>
-                                <b:commandButton value="Generate" action="#{FacultyBean.update()}"/>
+<h:outputLabel value="Notes"/>
+                                <b:inputTextarea value="#{appointmentBean.appointmentGenerator.notes}"></b:inputTextarea>
+<b:commandButton value="Generate" action="#{appointmentBean.generateAppointments()}"/>
                                 <hr/>
                             </h:panelGrid>
                         </h:form>
@@ -90,6 +92,8 @@
                                         <f:selectItem itemLabel="PM" itemValue="pm"/>
                                     </b:selectOneMenu>
                                 </b:row>
+                                <h:outputLabel value="Notes"/>
+                                <b:inputTextarea value="#{appointmentBean.appointmentAdder.notes}"></b:inputTextarea>
                                 <b:commandButton value="Add" action="#{appointmentBean.createAppointment()}"/>
                             </h:panelGrid>
                         </h:form>
@@ -97,9 +101,9 @@
                 </b:column>
                 <b:column span="8">
                     <b:fullCalendar id="calendar"></b:fullCalendar>
-                    
+                    <div style="width: 100%; height:100px;"></div>
                     <h:form>
-                <h:dataTable border="1" value="#{facultyAppointmentBean.appointmentList }" var="appointment">
+                        <b:dataTable searching="false" border="1" value="#{appointmentBean.list }" var="appointment">
                     <h:column>
                         <f:facet name="header">Date</f:facet>
                         <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
@@ -120,11 +124,11 @@
 
                     <h:column>
                         <f:facet name="header">Delete</f:facet>
-                        <h:commandButton value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
+                        <b:commandButton look="danger" value="Delete" action="#{appointmentBean.delete(appointment)}"/>
                     </h:column>
-                </h:dataTable>
+                </b:dataTable>
             </h:form>
-                    
+                    <div style="width: 100%; height:100px;"></div>s
                 </b:column>
             </b:row>
         </b:container>

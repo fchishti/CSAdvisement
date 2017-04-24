@@ -11,9 +11,11 @@ import AAS.model.Appointment;
 import AAS.model.FacultyUser;
 import AAS.model.User;
 import AAS.utility.AppointmentAdder;
+import AAS.utility.AppointmentGenerator;
 import AAS.utility.CurrentUser;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,6 +43,7 @@ public class AppointmentBean implements Serializable {
     private CurrentUser user;
     private User facultyUser;
     private AppointmentAdder appointmentAdder;
+    private AppointmentGenerator appointmentGenerator;
 
     @PostConstruct
     public void init() {
@@ -49,12 +52,18 @@ public class AppointmentBean implements Serializable {
         user = new CurrentUser(ds);
         facultyUser = new FacultyUser();
         appointmentAdder = new AppointmentAdder();
+        appointmentGenerator = new AppointmentGenerator();
         readFaculty();
+        readAppointments();
     }
 
     public String readFaculty() {
         try {
             this.facultyList = userDB.readFaculty();
+            Logger logger = Logger.getLogger(getClass().getName());
+            logger.severe("severe");
+            logger.info(facultyList.toString());
+            logger.fine("fine");
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,7 +99,7 @@ public class AppointmentBean implements Serializable {
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        read();
+        readAppointments();
         return null;
     }
 
@@ -100,8 +109,7 @@ public class AppointmentBean implements Serializable {
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        read();
-        return null;
+        return "/facultyFolder/appointments";
     }
 
     public User getFacultyUser() {
@@ -138,10 +146,39 @@ public class AppointmentBean implements Serializable {
     }
     
     public String createAppointment(){
-        Logger logger = Logger.getLogger(getClass().getName());
-        logger.severe("severe");
-        logger.info(appointmentAdder.toString());
-        logger.fine("fine");
+        Appointment appt = new Appointment();
+        appt.setDateTime(this.appointmentAdder.getDateTime());
+        appt.setNotes(this.appointmentAdder.getNotes());
+        this.create(appt);
+        readAppointments();
+        return "/facultyFolder/appointments";
+    }
+
+    public AppointmentGenerator getAppointmentGenerator() {
+        return appointmentGenerator;
+    }
+
+    public void setAppointmentGenerator(AppointmentGenerator appointmentGenerator) {
+        this.appointmentGenerator = appointmentGenerator;
+    }
+    
+    public String generateAppointments(){
+        List<Appointment> tempList = new ArrayList<>();
+        tempList = appointmentGenerator.getAppointmentList();
+        
+        for(Appointment a : tempList){
+            this.create(a);
+        }
+        readAppointments();
+        return "/facultyFolder/appointments";
+    }
+    
+    public String readAppointments(){
+        try {
+            list = dataBase.read(user.getUser());
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(AppointmentBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
 }

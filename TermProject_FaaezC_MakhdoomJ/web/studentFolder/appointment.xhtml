@@ -20,79 +20,95 @@
         </b:navBar>
         <b:container>
             <h1>Appointment</h1>
-            <h:form>
-                <b:selectOneMenu value="#{appointmentBean.facultyUser}">
-                    <f:selectItem value="#{null}" itemLabel="Select"/>
-                    <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}"/>
-                </b:selectOneMenu>
-            </h:form>
-            <h:outputText value="#{appointmentBean.facultyUser}"> </h:outputText>
-            <h:form>
-                <b:dataTable border="1" value="#{studentAppointmentBean.list}" var="appointment">
-                    <h:column>
-                        <f:facet name="header">Faculty</f:facet>
-                        <h:outputText value="#{appointment.facultyFirstname} "/>
-                        <h:outputText value="#{appointment.facultyLastname}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Date</f:facet>
-                        <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
-                        <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
-                        <h:outputText value="#{appointment.dateTime.year}"/>
-                    </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Time</f:facet>
-                        <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
-                        <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
-                    </h:column>
+            <b:row>
+                <b:column span="6">
+                    <b:well>
+                        <h:form>
+                            <b:dataTable searching="false" border="1" value="#{studentAppointmentBean.list}" var="appointment">
+                                <h:column>
+                                    <f:facet name="header">Faculty</f:facet>
+                                    <h:outputText value="#{appointment.facultyFirstname} "/>
+                                    <h:outputText value="#{appointment.facultyLastname}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.dateTime.year}"/>
+                                </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Notes</f:facet>
-                        <h:outputText value="#{appointment.notes}" />
-                    </h:column>
+                                <h:column>
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                                </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Delete</f:facet>
-                        <b:commandButton look="danger" value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
-                    </h:column>
-                </b:dataTable>
+                                <h:column>
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.notes}" />
+                                </h:column>
 
-                <hr></hr>
+                                <h:column>
+                                    <f:facet name="header">Delete</f:facet>
+                                    <b:commandButton look="danger" value="Delete" action="#{studentAppointmentBean.delete(appointment)}"/>
+                                </h:column>
+                            </b:dataTable>
+                        </h:form>
+                    </b:well>
+                </b:column>
+                <b:column span="6">
+                    <b:well>
+                        <h:form>
+                            <b:row>
+                                <b:column span="2">
+                                    <h:outputLabel value="Faculty:"/>
+                                </b:column>
+                                <b:column span="8">
+                                    <b:selectOneMenu value="#{appointmentBean.facultyUser}">
+                                        <f:selectItems value="#{appointmentBean.facultyList}" var="user" itemLabel="#{user.firstname} #{user.lastname}"/>
+                                    </b:selectOneMenu>
+                                </b:column> 
+                                <b:column span="2">
+                                    <b:commandButton value="View" action="#{appointmentBean.read()}"/>
+                                </b:column>
+                            </b:row>
+                            <div style="width:100%; height:30px"></div>
+                        </h:form>
+                        <h:form>
+                            <b:dataTable border="1" value="#{appointmentBean.list}" var="appointment">
+                                <h:column>
+                                    <f:facet name="header">Faculty</f:facet>
+                                    <h:outputText value="#{appointment.facultyFirstname} "/>
+                                    <h:outputText value="#{appointment.facultyLastname}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.dateTime.year}"/>
+                                </h:column>
 
-            </h:form>
-            <div style="width:100%;height:50px;"></div>
-            <h:form>
-                <b:dataTable border="1" value="#{appointmentBean.list}" var="appointment">
-                    <h:column>
-                        <f:facet name="header">Faculty</f:facet>
-                        <h:outputText value="#{appointment.facultyFirstname} "/>
-                        <h:outputText value="#{appointment.facultyLastname}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Date</f:facet>
-                        <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
-                        <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
-                        <h:outputText value="#{appointment.dateTime.year}"/>
-                    </h:column>
+                                <h:column>
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                                </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Time</f:facet>
-                        <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
-                        <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
-                    </h:column>
+                                <h:column>
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.notes}" />
+                                </h:column>
 
-                    <h:column>
-                        <f:facet name="header">Notes</f:facet>
-                        <h:outputText value="#{appointment.notes}" />
-                    </h:column>
-
-                    <h:column>
-                        <f:facet name="header">Select</f:facet>
-                        <b:commandButton value="Select" action="#{studentAppointmentBean.create(appointment)}"/>
-                    </h:column>
-                </b:dataTable>
-            </h:form>            
+                                <h:column>
+                                    <f:facet name="header">Select</f:facet>
+                                    <b:commandButton value="Select" action="#{studentAppointmentBean.create(appointment)}"/>
+                                </h:column>
+                            </b:dataTable>
+                        </h:form>
+                    </b:well>
+                </b:column>
+            </b:row>
         </b:container>
     </h:body>
 </html>

@@ -60,7 +60,7 @@
                     </b:thumbnail>
                     <p><h:outputLabel value="#{FacultyBean.facultyUser.firstname} #{FacultyBean.facultyUser.lastname}"/></p>
                     <p><b:icon name="envelope" /><h:outputLabel value="#{FacultyBean.facultyUser.email}"/></p>
-                    <b:button look="success" value="Edit Info" outcome="/facultyFolder/editInfo"/> 
+                    <b:button look="success" value="Edit Info" outcome="/facultyFolder/editInfo"/>
                 </b:column>
 
                 <b:column span="9">
@@ -92,6 +92,13 @@
                                 <b:dataTableColumn orderable="false">
                                     <f:facet name="header">Notes</f:facet>
                                     <h:outputText value="#{appointment.appointment.notes}" />
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Cancel</f:facet>
+                                    <h:commandLink style="color:rgba(0,0,0,0.3)" action="#{facultyAppointmentBean.cancelAppointment(appointment)}">
+                                        <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="remove" />
+                                    </h:commandLink>
                                 </b:dataTableColumn>
                             </b:dataTable>
 

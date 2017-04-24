@@ -48,7 +48,7 @@ public class FacultyAppointmentDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "select u.ID, u.FIRSTNAME, u.LASTNAME, a.DATE, a.TIME, a.ID as 'APPOINTMENTID', a.NOTES from USERTABLE u "
+                    "select u.ID, u.FIRSTNAME, u.LASTNAME, u.EMAIL, a.DATE, a.TIME, a.FACULTYFIRSTNAME, a.FACULTYLASTNAME, a.ID as 'APPOINTMENTID', a.NOTES from USERTABLE u "
                     + "join STUDENTAPPOINTMENTTABLE s on u.id = s.USER_ID "
                     + "join APPOINTMENTTABLE a on s.APPOINTMENT_ID = a.ID "
                     + "where a.USER_ID = (?)"
@@ -71,11 +71,14 @@ public class FacultyAppointmentDB {
 
                 a.setDateTime(dateTime);
                 a.setNotes(result.getString("NOTES"));
+                a.setFacultyFirstname(result.getString("FACULTYFIRSTNAME"));
+                a.setFacultyLastname(result.getString("FACULTYLASTNAME"));
 
                 User u = new StudentUser();
                 u.setUserId(result.getInt("ID"));
                 u.setFirstname(result.getString("FIRSTNAME"));
                 u.setLastname(result.getString("LASTNAME"));
+                u.setEmail(result.getString("EMAIL"));
 
                 sa.setAppointment(a);
                 sa.setUser(u);
@@ -88,5 +91,31 @@ public class FacultyAppointmentDB {
         }
 
         return list;
+    }
+    
+    public void delete(StudentAppointment studentAppointment) throws SQLException {
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(
+                    "delete from STUDENTAPPOINTMENTTABLE where APPOINTMENT_ID = (?) and USER_ID = (?)"
+            );
+
+            ps.setInt(1, studentAppointment.appointment.getAppointmentId());
+            ps.setInt(2, studentAppointment.user.getUserId());
+            
+            int result = ps.executeUpdate();
+
+        } finally {
+            conn.close();
+        }
     }
 }

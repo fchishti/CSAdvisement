@@ -6,7 +6,7 @@
 package AAS.utility;
 
 import AAS.controller.AuthDB;
-import AAS.model.StudentUser;
+import AAS.model.StudentAppointment;
 import AAS.model.User;
 import AAS.view.SessionBean;
 import java.sql.SQLException;
@@ -34,24 +34,25 @@ public class Email {
 
     public Email(DataSource db) {
         this.db = db;
-        
+
         props = new Properties();
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", "587");
 
-        session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
-            }
-        });
     }
 
     public void send(String text, String to) {
         try {
+            session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            });
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
@@ -66,11 +67,19 @@ public class Email {
             e.printStackTrace();
         }
     }
-    
-    public void sendAuthCode(User student){
+
+    public void sendAuthCode(User student) {
         Random rand = new Random();
-        String code = ""+(rand.nextInt(9999999) + 1000000);
+        String code = "" + (rand.nextInt(9999999) + 1000000);
         try {
+            session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            });
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(user));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(student.getEmail()));
@@ -84,7 +93,7 @@ public class Email {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-        
+
         AuthDB dataBase = new AuthDB(db);
         try {
             dataBase.create(student, Integer.parseInt(code));
@@ -92,5 +101,37 @@ public class Email {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    public void sendDeleteConfirm(StudentAppointment appointment) {
+        try {
+            session = Session.getInstance(props,
+                    new javax.mail.Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, password);
+                }
+            });
+
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(user));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(appointment.user.getEmail()));
+            message.setSubject("CS Advisement");
+            message.setText("Your " + appointment.appointment.getDateTime().dayOfMonth() +
+                     appointment.appointment.getDateTime().monthOfYear() +
+                    appointment.appointment.getDateTime().year() 
+                    + " at "
+                    + appointment.appointment.getDateTime().hourOfDay()
+                    + appointment.appointment.getDateTime().minuteOfHour()
+                    + " appointment has been canceled by " + appointment.appointment.getFacultyFirstname()
+                    + " " + appointment.appointment.getFacultyLastname());
+
+            Transport.send(message);
+
+            System.out.println("message sent successfully...");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
