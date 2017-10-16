@@ -56,11 +56,12 @@ public class StudentCourseBean implements Serializable{
     public String insert(Course course){
         try{
             studentCoursesDB.create(user.getUser(),course);
+            read();
         } catch (SQLException ex){
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         read();
-        return null;
+        return "/studentFolder/editCourses";
     }
     
     public String delete(Course course){
