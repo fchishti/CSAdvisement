@@ -6,28 +6,29 @@
 package AAS.controller;
 
 import AAS.model.Course;
+import AAS.model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
  *
- * @author cece
+ * @author faaez
  */
-
-public class CoursesDB {
+public class StudentCourseDB {
 
     private DataSource db;
 
-    public CoursesDB(DataSource db) {
+    public StudentCourseDB(DataSource db) {
         this.db = db;
     }
 
-    public void create(Course course) throws SQLException {
+    public void create(User user, Course course) throws SQLException {
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -41,15 +42,13 @@ public class CoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into COURSETABLE(tite, courseprefix, code)"
-                    + "values(?,?,?)"
+                    "insert into STUDENTCOURSESTABLE(user_id, course_id)"
+                    + "values(?,?)"
             );
 
-            ps.setString(1, course.getTitle());
+            ps.setInt(1, user.getUserId());
 
-            ps.setString(2, course.getPrefix());
-
-            ps.setInt(3, course.getCode());
+            ps.setInt(2, course.getId());
 
             int result = ps.executeUpdate();
 
@@ -62,7 +61,7 @@ public class CoursesDB {
         }
     }
 
-    public List<Course> read() throws SQLException {
+    public List<Course> read(User user) throws SQLException {
 
         List<Course> list = new ArrayList<>();
 
@@ -78,8 +77,11 @@ public class CoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "select ID, TITLE, COURSEPREFIX, CODE from COURSETABLE"
+                    "select COURSETABLE.ID, COURSETABLE.TITLE, COURSETABLE.COURSEPREFIX, COURSETABLE.CODE from COURSETABLE "
+                    + "inner join STUDENTCOURSESTABLE on COURSETABLE.ID = STUDENTCOURSESTABLE.ID where STUDENTCOURSESTABLE.USER_ID = (?)"
             );
+
+            ps.setInt(1, user.getUserId());
 
             ResultSet result = ps.executeQuery();
 
@@ -91,6 +93,7 @@ public class CoursesDB {
                 c.setPrefix(result.getString("COURSEPREFIX"));
                 c.setCode(result.getInt("CODE"));
                 list.add(c);
+
             }
 
         } finally {
@@ -100,7 +103,7 @@ public class CoursesDB {
         return list;
     }
 
-    public void update(Course course) throws SQLException {
+    public void delete(User user, Course course) throws SQLException {
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -112,29 +115,23 @@ public class CoursesDB {
         }
 
         try {
-
             PreparedStatement ps = conn.prepareStatement(
-                    "update COURSETABLE set TITLE = (?), COURSEPREFIX = (?), CODE = (?)"
-                    + "where ID = (?)"
+                    "delete from STUDENTCOURSESTABLE where USER_ID = (?) AND COURSE_ID = (?)"
             );
 
-            ps.setString(1, course.getTitle());
-            ps.setString(2, course.getPrefix());
-            ps.setInt(3, course.getCode());
-            ps.setInt(4, course.getId());
+            ps.setInt(1, user.getUserId());
+            ps.setInt(2, course.getId());
 
             int result = ps.executeUpdate();
-
-            if (result != 1) {
-                throw new SQLException();
-            }
 
         } finally {
             conn.close();
         }
     }
-    
-        public void delete(Course course) throws SQLException {
+
+    public List<Course> readFromId(int userId) throws SQLException{
+        List<Course> list = new ArrayList<>();
+
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -147,15 +144,29 @@ public class CoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "delete from COURSETABLE where ID = (?)"
+                    "select COURSETABLE.ID, COURSETABLE.TITLE, COURSETABLE.COURSEPREFIX, COURSETABLE.CODE from COURSETABLE "
+                    + "inner join STUDENTCOURSESTABLE on COURSETABLE.ID = STUDENTCOURSESTABLE.ID where STUDENTCOURSESTABLE.USER_ID = (?)"
             );
 
-            ps.setInt(1, course.getId());
+            ps.setInt(1, userId);
 
-            int result = ps.executeUpdate();
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+
+                Course c = new Course();
+                c.setId(result.getInt("ID"));
+                c.setTitle(result.getString("TITLE"));
+                c.setPrefix(result.getString("COURSEPREFIX"));
+                c.setCode(result.getInt("CODE"));
+                list.add(c);
+
+            }
 
         } finally {
             conn.close();
         }
+
+        return list;
     }
 }

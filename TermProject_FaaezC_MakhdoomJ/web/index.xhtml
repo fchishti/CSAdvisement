@@ -1,22 +1,48 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
-        Hello from Facelets
-        <br />
-        <h:link value="Student login" outcome="/studentFolder/index" /> <br />
-        <h:link value="Faculty login" outcome="/facultyFolder/index" /> <br />
-        <h:link value="Admin login" outcome="/adminFolder/index" /> <br />
-        <br/><br/>
-        <h:link value="Register" outcome="/registration" /> <br />
-        <br/><br/>
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
-        <br/><br/>
-        <h:link value="Logout" outcome="/logout" /> <br />
+        <div style="width:100%; height:180px; background: rgba(0,0,0,0.2); margin-bottom: 50px;">
+            <b:container>
+                <h1>University of Central Oklahoma</h1>
+                <h2 style="margin-top: -10px;">Computer Science</h2>
+            </b:container>
+        </div>
+
+        <b:container>
+            <b:row>
+                <b:column offset="2"  span="4">
+                    <div style="text-align: center;">
+                        <p><h:link outcome="/studentFolder/index"><b:iconAwesome name="graduation-cap" size="5x" /></h:link></p>
+                        <h:link value="Student login" outcome="/studentFolder/index" />    
+                    </div>
+                </b:column>
+                <b:column  span="4">
+                    <div style="text-align: center;">
+                        <p><h:link outcome="/facultyFolder/index"><b:icon name="user" size="5x" /></h:link></p>
+                        <h:link value="Faculty login" outcome="/facultyFolder/index" />
+                    </div>
+                </b:column>
+            </b:row>
+            <b:row>
+                <hr/>
+                <b:column span="4">
+                    Not a member yet?
+                    <h:link value="Register" outcome="/registration" />
+                </b:column>
+
+                <b:column offset="4" span="4">
+                    <div style="text-align: right">
+                        <h:link style="text-align: right;" value="Admin Panel" outcome="/adminFolder/index" />
+                    </div>
+                </b:column>
+            </b:row>
+        </b:container>
     </h:body>
 </html>
 

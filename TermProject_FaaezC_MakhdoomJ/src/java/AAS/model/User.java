@@ -5,20 +5,30 @@
  */
 package AAS.model;
 
+import javax.validation.constraints.NotNull;
+
 /**
  *
  * @author faaez
  */
 public abstract class User {
 
+    @NotNull(message="Please enter first name")
     public String firstname;
+    
+    @NotNull(message="Please enter last name")
     public String lastname;
+    
+    @NotNull(message="Please enter email")
     public String email;
+    
+    @NotNull(message="Please enter a password")
     public String password;
+    
     public int userId;
     public String group;
-    
-    public User(){
+
+    public User() {
     }
 
     public String getFirstname() {
@@ -68,5 +78,13 @@ public abstract class User {
     public void setGroup(String group) {
         this.group = group;
     }
-    
+
+    @Override
+    public String toString() {
+        return this.firstname + " "
+                + this.lastname + " "
+                + this.email + " "
+                + this.group;
+    }
+
 }

@@ -1,21 +1,134 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>Facelet Title</title>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('button').click(function () {
+                    if (this.id.toString().includes("fileButton")) {
+                        $('input[type=file]').trigger('click');
+                    }
+                });
+            });
+        </script>
     </h:head>
     <h:body>
-        Hello from Student Pages
-        <br />
-        <h:outputLabel value="#{StudentBean.user.firstname}"/><br/>
-        <h:outputLabel value="#{StudentBean.user.lastname}"/><br/>
-        <h:outputLabel value="#{StudentBean.user.email}"/><br/>
-        <h:outputLabel value="#{StudentBean.user.studentId}"/><br/>
-        <h:outputLabel value="#{StudentBean.user.majorCode}"/><br/>
-        <br/><br/>
-        <h:button value="edit" outcome="/studentFolder/editInfo"/>
-        <h:link value="Logout" outcome="/logout" /> <br />
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/studentFolder/index" ></b:navLink>
+                <b:navLink value="Courses" outcome="/studentFolder/editCourses"></b:navLink>
+                <b:navLink value="Appointments" outcome="/studentFolder/appointment"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <h:panelGroup layout="block" rendered="#{!StudentBean.isAuthorized()}">
+            <div style="background:rgba(0,0,0,0.1); width:100%; height:50px; margin-bottom:20px;">
+                <p style="color:red;padding:5px;">Please <h:link outcome="/studentFolder/authorize">authorize</h:link> your account. Without authorization, you will not be able to book an appointment. <b:icon name="info" /></p>
+            </div>
+        </h:panelGroup>
+        <b:container>
+            <b:modal id="amodal" title="Update Profile Picture" styleClass="modalPseudoClass">
+                <h:form enctype="multipart/form-data">
+                    <b:button size="lg"  id="fileButton"  icon="plus" value="Choose" look="primary"/>
+                    <h:inputFile style="visibility:hidden;" id="file" label="file" value="#{imageFileBean.part}" validator="#{imageFileBean.validateFile}" />
+                    <b:message for="file" errorStyle="color: red" infoStyle="color: blue"/>
+                    <b:commandButton icon="upload" id="upload" action="#{imageFileBean.upload()}" value="Upload" />
+                    <b:message for="upload" errorStyle="color: red" infoStyle="color: blue" />
+                </h:form>
+                <f:facet name="footer">
+                    <b:button value="close" dismiss="modal" onclick="return false;"/>
+                </f:facet>
+            </b:modal>
+            <b:row>
+                <b:column span="3">
+                    <b:thumbnail>
+                        <div style="position:relative;">
+                            <div style="position:absolute; top:5px; left: 10px; " >
+                                <h:form>
+                                <h:commandLink style="color:rgba(0,0,0,0.3)" action="#{imageFileBean.delete()}">
+                                    <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="remove" />
+                                </h:commandLink>
+                                </h:form>
+                            </div>
+                            <img style="width:250px; height:250px;" src="../ImageServlet" />
+                            <div style="position:absolute; bottom:5px; right: 10px; " >
+                                <a style="color:rgba(0,0,0,0.3)" id="atrigger" href="#amodal" data-toggle="modal">
+                                    <b:icon style="background: rgba(0,0,0,0.08); padding: 5px; border-radius: 2px;" name="camera" />
+                                </a>
+                            </div>
+                        </div>
+                    </b:thumbnail>
+                    <p><h:outputLabel value="#{StudentBean.studentUser.firstname} #{StudentBean.studentUser.lastname}"/></p><hr/>
+                    <p><b:icon name="envelope" /><h:outputLabel value="#{StudentBean.studentUser.email}"/></p>
+                    <p><b:icon name="credit-card" /><h:outputLabel value="#{StudentBean.studentUser.studentId}"/></p>
+                    <p><b:icon name="education" /><h:outputLabel value="#{StudentBean.studentUser.majorCode}"/></p>
+                    <b:button icon="pencil" look="primary" value="Edit Info" outcome="/studentFolder/editInfo"/>
+                </b:column>
+
+                <b:column span="9">
+                    <b:panel title="Courses" look="primary">
+                        <h:form>
+                            <b:dataTable searching="false" paginated="false" value="#{studentCourseBean.list}" var="course">
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Code</f:facet>
+                                    <h:outputText value="#{course.code}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Title</f:facet>
+                                    <h:outputText value="#{course.title}" />
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Prefix</f:facet>
+                                    <h:outputText value="#{course.prefix}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </h:form>
+                    </b:panel>
+                    <div style="width:100%;height:50px;"></div>
+                    <b:panel title="Appointment" look="primary">
+                        <h:form>
+                            <b:dataTable searching="false" paginated="false" value="#{studentAppointmentBean.list}" var="appointment">
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Faculty</f:facet>
+                                    <h:commandLink action="#{StudentBean.readFaculty(appointment.facultyId)}">
+                                        <h:outputText value="#{appointment.facultyFirstname} "/>
+                                    </h:commandLink>
+                                    <h:commandLink action="#{StudentBean.readFaculty(appointment.facultyId)}">
+                                        <h:outputText value="#{appointment.facultyLastname}"/>
+                                    </h:commandLink>
+                                </b:dataTableColumn>
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Date</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.dayOfMonth} / "/>
+                                    <h:outputText value="#{appointment.dateTime.monthOfYear} / "/>
+                                    <h:outputText value="#{appointment.dateTime.year}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Time</f:facet>
+                                    <h:outputText value="#{appointment.dateTime.hourOfDay} : "/>
+                                    <h:outputText value="#{appointment.dateTime.minuteOfHour}"/>
+                                </b:dataTableColumn>
+
+                                <b:dataTableColumn orderable="false">
+                                    <f:facet name="header">Notes</f:facet>
+                                    <h:outputText value="#{appointment.notes}" />
+                                </b:dataTableColumn>
+                            </b:dataTable>
+                        </h:form>
+                    </b:panel>
+
+                </b:column>
+            </b:row>
+        </b:container>
     </h:body>
 </html>
 

@@ -11,23 +11,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.sql.DataSource;
 
 /**
  *
  * @author faaez
  */
-public class StudentCoursesDB {
+public class AuthDB {
 
     private DataSource db;
 
-    public StudentCoursesDB(DataSource db) {
+    public AuthDB(DataSource db) {
         this.db = db;
     }
 
-    public void create(User user, Course course) throws SQLException {
+    public void create(User user, int code) throws SQLException {
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -41,13 +39,13 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "insert into STUDENTCOURSESTABLE(user_id, course_id)"
-                    + "values(?,?)"
+                    "insert into CODETABLE(USER_ID, CODE)"
+                    + "values((SELECT ID from USERTABLE where EMAIL = (?)),?)"
             );
 
-            ps.setInt(1, user.getUserId());
+            ps.setString(1, user.getEmail());
 
-            ps.setInt(2, course.getId());
+            ps.setInt(2, code);
 
             int result = ps.executeUpdate();
 
@@ -60,9 +58,9 @@ public class StudentCoursesDB {
         }
     }
 
-    public List<Course> read(User user) throws SQLException {
+    public boolean isAuthroized(User user) throws SQLException {
 
-        List<Course> list = new ArrayList<>();
+        boolean isAuthroized = false;
 
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
@@ -76,33 +74,28 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                "select a.TITLE, a.COURSEPREFIX, a.CODE from COURSETABLE a" +
-                    "inner join STUDENTCOURSESTABLE b on a.ID = b.ID" +
-                    "where b.USER_ID = (?)"
+                    "select AUTHORIZED from STUDENTTABLE where USER_ID = (?)"
             );
-            
+
             ps.setInt(1, user.getUserId());
 
             ResultSet result = ps.executeQuery();
 
             while (result.next()) {
-
-                Course c = new Course();
-                c.setId(result.getInt("ID"));
-                c.setTitle(result.getString("TITLE"));
-                c.setPrefix(result.getString("COURSEPREFIX"));
-                c.setCode(result.getInt("CODE"));
-                list.add(c);
+                isAuthroized = result.getBoolean("AUTHORIZED");
             }
 
         } finally {
             conn.close();
         }
 
-        return list;
+        return isAuthroized;
     }
 
-    public void delete(User user, Course course) throws SQLException {
+    public int readCode(User user) throws SQLException {
+
+        int code = 0;
+
         if (db == null) {
             throw new SQLException("db is null; Can't get data source");
         }
@@ -115,13 +108,48 @@ public class StudentCoursesDB {
 
         try {
             PreparedStatement ps = conn.prepareStatement(
-                    "delete from STUDENTCOURSESTABLE where USER_ID = (?) AND COURSD_ID = (?)"
+                    "select CODE from CODETABLE where USER_ID = (?)"
             );
 
             ps.setInt(1, user.getUserId());
-            ps.setInt(2, course.getId());
+
+            ResultSet result = ps.executeQuery();
+
+            while (result.next()) {
+                code = result.getInt("CODE");
+            }
+
+        } finally {
+            conn.close();
+        }
+
+        return code;
+    }
+
+    public void authorize(User user) throws SQLException {
+        if (db == null) {
+            throw new SQLException("db is null; Can't get data source");
+        }
+
+        Connection conn = db.getConnection();
+
+        if (conn == null) {
+            throw new SQLException("conn is null; Can't get db connection");
+        }
+
+        try {
+
+            PreparedStatement ps = conn.prepareStatement(
+                    "update STUDENTTABLE set AUTHORIZED = true where USER_ID = (?)"
+            );
+
+            ps.setInt(1, user.getUserId());
 
             int result = ps.executeUpdate();
+
+            if (result != 1) {
+                throw new SQLException();
+            }
 
         } finally {
             conn.close();

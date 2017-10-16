@@ -19,24 +19,23 @@
             </b:navbarLinks>
         </b:navBar>
         <b:container>
-            <h1>admin page</h1>           
+        <b:form>
+            <h:panelGrid>
+                    <h:outputLabel for="Title" value="Title" />
+                    <b:inputText  value="#{courseBean.course.title}"/>
+                    <h:message for="title" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="prefix" value="Prefix" />
+                    <b:inputText  value="#{courseBean.course.prefix}"/>
+                    <h:message for="prefix" errorStyle="color:red"/>
+                    
+                    <h:outputLabel for="code" value="Code" />
+                    <b:inputText  value="#{courseBean.course.code}"/>
+                    <h:message for="code" errorStyle="color:red"/>
 
-            <b:dataTable searching="false" paginated="false" border="1" value="#{userBean.list}" var="user">
-                <h:column>
-                    <f:facet name="header">Firstname</f:facet>
-                    <h:outputText value="#{user.firstname}"/>
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Lastname</f:facet>
-                    <h:outputText value="#{user.lastname}" />
-                </h:column>
-
-                <h:column>
-                    <f:facet name="header">Email</f:facet>
-                    <h:outputText value="#{user.email}" />
-                </h:column>                     
-            </b:dataTable>
+                    <b:commandButton value="Save" action="#{courseBean.update()}"/>
+                </h:panelGrid>
+        </b:form>
         </b:container>
     </h:body>
 </html>

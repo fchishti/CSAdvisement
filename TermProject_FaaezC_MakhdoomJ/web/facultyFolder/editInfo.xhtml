@@ -13,27 +13,19 @@
             <h:form>
                 <h:panelGrid>
                     <h:outputLabel for="firstname" value="firstname" />
-                    <b:inputText id="firstname" value="#{StudentBean.studentUser.firstname}"/>
+                    <b:inputText id="firstname" value="#{FacultyBean.facultyUser.firstname}"/>
                     <h:message for="firstname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="lastname" value="lastname" />
-                    <b:inputText id="lastname" value="#{StudentBean.studentUser.lastname}"/>
+                    <b:inputText id="lastname" value="#{FacultyBean.facultyUser.lastname}"/>
                     <h:message for="lastname" errorStyle="color:red"/>
                     
                     <h:outputLabel for="email" value="email" />
-                    <b:inputText id="email" value="#{StudentBean.studentUser.email}"/>
+                    <b:inputText id="email" value="#{FacultyBean.facultyUser.email}"/>
                     <h:message for="email" errorStyle="color:red"/>
-                    
-                    <h:outputLabel for="studentid" value="student ID." />
-                    <b:inputText id="studentid" value="#{StudentBean.studentUser.studentId}"/>
-                    <h:message for="studentid" errorStyle="color:red"/>
-                    
-                    <h:outputLabel for="majorcode" value="major code" />
-                    <b:inputText id="majorcode" value="#{StudentBean.studentUser.majorCode}"/>
-                    <h:message for="majorcode" errorStyle="color:red"/>
 
-                    <b:commandButton look="success" value="Save" action="#{StudentBean.update()}"/> <br/>
-                    <b:button  value="Back" outcome="/studentFolder/index"/>
+                    <b:commandButton look="success" value="Save" action="#{FacultyBean.update()}"/> <br/>
+                                       
                 </h:panelGrid>
             </h:form>
         </b:container>

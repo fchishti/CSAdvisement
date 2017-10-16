@@ -5,21 +5,67 @@
  */
 package AAS.model;
 
-import java.sql.Date;
+import org.joda.time.DateTime;
 
 /**
  *
  * @author faaez
  */
-class Appointment {
-    public Date dateTime;
+public class Appointment {
 
-    public Date getDateTime() {
+    public int appointmentId;
+    public int facultyId;
+    public String facultyFirstname;
+    public String facultyLastname;
+    public DateTime dateTime;
+    public String notes;
+
+    public DateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(Date dateTime) {
+    public void setDateTime(DateTime dateTime) {
         this.dateTime = dateTime;
     }
-    
+
+    public int getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(int appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public int getFacultyId() {
+        return facultyId;
+    }
+
+    public void setFacultyId(int facultyId) {
+        this.facultyId = facultyId;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getFacultyFirstname() {
+        return facultyFirstname;
+    }
+
+    public void setFacultyFirstname(String facultyFirstname) {
+        this.facultyFirstname = facultyFirstname;
+    }
+
+    public String getFacultyLastname() {
+        return facultyLastname;
+    }
+
+    public void setFacultyLastname(String facultyLastname) {
+        this.facultyLastname = facultyLastname;
+    }
+
 }

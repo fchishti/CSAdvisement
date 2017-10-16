@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 public class CurrentUser {
 
     private UserDB database;
-    public User user;
+    private User user;
     private DataSource ds;
     private String role;
 
@@ -47,7 +47,7 @@ public class CurrentUser {
         database = new UserDB(ds);
 
         try {
-            user = database.readUser(username, role);
+            user = database.readUserFromUsername(username, role);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(SessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }

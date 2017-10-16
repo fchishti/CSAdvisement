@@ -19,24 +19,32 @@
             </b:navbarLinks>
         </b:navBar>
         <b:container>
-            <h1>admin page</h1>           
-
-            <b:dataTable searching="false" paginated="false" border="1" value="#{userBean.list}" var="user">
+        <h:form>
+            <b:dataTable searching="false" paginated="false" border="1" value="#{courseBean.list}" var="course">
                 <h:column>
-                    <f:facet name="header">Firstname</f:facet>
-                    <h:outputText value="#{user.firstname}"/>
+                    <f:facet name="header">Code</f:facet>
+                    <h:outputText value="#{course.code}"/>
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Lastname</f:facet>
-                    <h:outputText value="#{user.lastname}" />
+                    <f:facet name="header">Title</f:facet>
+                    <h:outputText value="#{course.title}" />
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Email</f:facet>
-                    <h:outputText value="#{user.email}" />
-                </h:column>                     
+                    <f:facet name="header">Prefix</f:facet>
+                    <h:outputText value="#{course.prefix}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Edit</f:facet>
+                    <b:commandButton value="Edit" action="#{courseBean.editCourse(course)}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Delete</f:facet>
+                    <b:commandButton look="danger" value="Delete" action="#{courseBean.delete(course)}"/>
+                </h:column>
             </b:dataTable>
+        </h:form>
         </b:container>
     </h:body>
 </html>

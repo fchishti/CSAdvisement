@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <h:head>
+        <title>Edit Courses</title>
+    </h:head>
+    <h:body>        
+        <b:navBar brand="UCO CS Advisement" brandHref="#" inverse="true">
+            <b:navbarLinks>
+                <b:navLink value="Home" outcome="/studentFolder/index" ></b:navLink>
+                <b:navLink value="Courses" outcome="/studentFolder/editCourses"></b:navLink>
+                <b:navLink value="Appointments" outcome="/studentFolder/appointment"></b:navLink>
+            </b:navbarLinks>
+            <b:navbarLinks pull="right">
+                <b:navLink value="Logout" outcome="/logout"></b:navLink>
+            </b:navbarLinks>
+        </b:navBar>
+        <b:container>
+            <h1>Course Editor</h1>
+            <b:row>
+                <b:column span="6">
+                    <b:well>
+                        <h3>Your Courses</h3>
+                    <h:form>
+                        <b:dataTable searching="false" border="1" value="#{studentCourseBean.list}" var="course">
+                            <h:column>
+                                <f:facet name="header">Code</f:facet>
+                                <h:outputText value="#{course.code}"/>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Title</f:facet>
+                                <h:outputText value="#{course.title}" />
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Prefix</f:facet>
+                                <h:outputText value="#{course.prefix}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Delete</f:facet>
+                                <b:commandButton look="danger" value="Delete" action="#{studentCourseBean.delete(course)}"/>
+                            </h:column>
+                        </b:dataTable>
+                    </h:form>
+                    </b:well>
+                </b:column>
+                <b:column span="6">
+                    <b:well>
+                        <h3>Available Courses</h3>
+                    <h:form>
+                        <b:dataTable searching="false" border="1" value="#{courseBean.list}" var="course">
+                            <h:column>
+                                <f:facet name="header">Code</f:facet>
+                                <h:outputText value="#{course.code}"/>
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Title</f:facet>
+                                <h:outputText value="#{course.title}" />
+                            </h:column>
+
+                            <h:column>
+                                <f:facet name="header">Prefix</f:facet>
+                                <h:outputText value="#{course.prefix}" />
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">Add</f:facet>
+                                <b:commandButton look="success" value="Add" action="#{studentCourseBean.insert(course)}"/>
+                            </h:column>
+                        </b:dataTable>
+                    </h:form>
+                    </b:well>
+                </b:column>
+            </b:row>
+        </b:container>
+    </h:body>
+</html>
+
